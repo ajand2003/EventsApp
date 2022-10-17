@@ -13,21 +13,21 @@ function Navbar() {
             <ul className="navbar__menu">
               <li className="navbar__item">
               <NavLink
-                    className={(navData) => (navData.isActive ? 'active' : 'navbar__links')}
-                    to="/"> 
+                    className={({isActive}) => (isActive ? 'active' : 'navbar__links')}
+                    to="/" end> 
                 Home
               </NavLink>
               </li>
               <li className="navbar__item">
               <NavLink
-                    className={(navData) => (navData.isActive ? 'active' : 'navbar__links')}
+                    className={({isActive}) => (isActive ? 'active' : 'navbar__links')}
                     to="/calendar"> 
                 Calendar
               </NavLink>
               </li>
               <li className="navbar__item">
               <NavLink
-                    className={(navData) => (navData.isActive ? 'active' : 'navbar__links')}
+                    className={({isActive}) => (isActive ? 'active' : 'navbar__links')}
                     to="/map"> 
                 Map
               </NavLink>
