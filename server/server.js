@@ -9,6 +9,12 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+var events = require('./routers/events');
+var users = require('./routers/users');
+
+app.use('/events', events);
+app.use('/users', users);
+
 ATLAS_URI = "mongodb+srv://ajand2003:Cat123pie@cluster0.xrmrqqr.mongodb.net/?retryWrites=true&w=majority"
 
 const uri = ATLAS_URI;
