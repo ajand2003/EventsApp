@@ -14,10 +14,16 @@ export default function CreateEvent({setNewAccount}: CreateAccountProps) {
         } else {
             const user = {
                 username: username,
-                password: password
+                password: password,
+                userType: userType
             }
             axios.post('http://localhost:5000/users/add', user)
-                .then(res => console.log(res.data))
+            .then(rs => {
+                setNewAccount(false);
+              })
+              .catch((error) => {
+                alert('Username does not exist or incorrect password')
+              })
         }
         setNewAccount(false);
     }

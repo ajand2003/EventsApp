@@ -1,5 +1,7 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { useNavigate } from "react-router-dom"
+import axios from "axios";
+import UserContext from "./UserContext";
 
 export default function CreateEvent() {
     const [title, setTitle] = useState('')
@@ -7,8 +9,21 @@ export default function CreateEvent() {
     const [time, setTime] = useState('')
     const [location, setLocation] = useState('')
     const [desc, setDesc] = useState('')
+    const {username} = useContext(UserContext)
     const navigate = useNavigate()
     const handleSubmit = () => {
+        const event = {
+            title: title,
+            date: date,
+            time: time,
+            location: location,
+            desc: desc,
+            host: username
+        }
+        axios.post('http://localhost:5000/events/add', event)
+        .then(rs => {
+            console.log("Event Added");
+        })
         navigate('/')
     }
     const handleTitleChange = (e: React.ChangeEvent<any>) => {

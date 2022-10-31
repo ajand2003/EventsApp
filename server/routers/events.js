@@ -8,17 +8,19 @@ router.route('/').get((req, res) => {
 });
 
 router.route('/add').post((req, res) => {
-  const user = req.body.user;
+  const host = req.body.host;
   const location = req.body.location;
-  const description = req.body.description;
-  const date = Date.parse(req.body.date);
+  const desc = req.body.desc;
+  const date = req.body.date;
   const title = req.body.title;
+  const time = req.body.time;
 
 
   const newEvent = new Event({
-    user,
+    host,
+    time,
     location,
-    description,
+    desc,
     date,
     title,
   });

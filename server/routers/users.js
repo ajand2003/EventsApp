@@ -12,26 +12,35 @@ router.route('/add').post((req, res) => {
   const password = req.body.password;
   const userType = req.body.userType
   const newUser = new User({username, password, userType});
-
-  newUser.save()
-    .then(() => res.json('User added!'))
-    .catch(err => res.status(400).json('Error: ' + err));
+  User.findOne({ username: req.body.username }).then(
+    (user) => {
+      if (!user) {
+        newUser.save()
+        .then(() => res.json('User added!'))
+        .catch(err => res.status(400).json('Error: ' + err));
+      } else {
+        return res.status(401).json({
+            error: new Error('Username already exists!')
+          });
+      }
+    });
 });
 
 router.route('/:username').delete((req, res) => {
     User.findOneAndRemove(req.params.username)
-      .then(() => res.json('Event deleted.'))
+      .then(() => res.json('User deleted.'))
       .catch(err => res.status(400).json('Error: ' + err));
   });
 router.route('/login').post((req, res) => {
     User.findOne({ username: req.body.username }).then(
         (user) => {
-            console.log(user);
           if (!user) {
             return res.status(401).json({
               error: new Error('User not found!')
             });
-          } else if (user.password!=req.body.password){
+          } else if (user.password!=req.body.password || user.userType != req.body.userType){
+            console.log(user.password, user.userType)
+            console.log(req.body.userType)
             return res.status(401).json({
                 error: new Error('Wrong Password!')
               });

@@ -16,14 +16,15 @@ export default function LoginPage({handleLogIn}: LoginProps) {
         e.preventDefault();
         const user = {
             username: username,
-            password: password
+            password: password,
+            userType: userType
         }
         axios.post('http://localhost:5000/users/login', user)
         .then(rs => {
           handleLogIn();
         })
         .catch((error) => {
-          console.log(error);
+          alert('Incorrect Credentials')
         })
   
 
