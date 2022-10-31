@@ -14,17 +14,14 @@ export default function LoginPage({handleLogIn}: LoginProps) {
     const {username,setUsername,password, setPassword,userType, setUserType} = useContext(UserContext)
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        axios.get('http://localhost:5000/users/login/')
-        .then(response => {
-          if (response.data.length > 0) {
-            console.log(response);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-  
-
+        const user = {
+            username: username,
+            password: password
+        }
+        const rs = await axios.post('http://localhost:5000/users/login', user)
+        if(rs!= null){
+            handleLogIn();
+        }
     };
     const handleUserChange = (e: React.ChangeEvent<any>) => {
         const value = e.target.value;

@@ -23,42 +23,22 @@ router.route('/:username').delete((req, res) => {
       .then(() => res.json('Event deleted.'))
       .catch(err => res.status(400).json('Error: ' + err));
   });
-router.route('/login:username').get((req, res) => {
-    console.log(req.body.username);
+router.route('/login').post((req, res) => {
     User.findOne({ username: req.body.username }).then(
         (user) => {
+            console.log(user);
           if (!user) {
             return res.status(401).json({
               error: new Error('User not found!')
             });
+          } else if (user.password!=req.body.password){
+            return res.status(401).json({
+                error: new Error('Wrong Password!')
+              });
+          } else {
+            return (user => res.json(user))
           }
-          bcrypt.compare(req.body.password, user.password).then(
-            (valid) => {
-              if (!valid) {
-                return res.status(401).json({
-                  error: new Error('Incorrect password!')
-                });
-              }
-              res.status(200).json({
-                userId: user._id,
-                token: 'token'
-              });
-            }
-          ).catch(
-            (error) => {
-              res.status(500).json({
-                error: error
-              });
-            }
-          );
-        }
-      ).catch(
-        (error) => {
-          res.status(500).json({
-            error: error
-          });
-        }
-      );
+        });
 });
 
 module.exports = router;
