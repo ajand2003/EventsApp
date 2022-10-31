@@ -32,7 +32,10 @@ export default function CreateEvent() {
     }
     const handleDateChange = (e: React.ChangeEvent<any>) => {
         const value = e.target.value
-        setDate(value)
+        Date.parse(value)
+        console.log(value)
+
+        setDate("" + Date.parse(value))
     }
     const handleTimeChange = (e: React.ChangeEvent<any>) => {
         const value = e.target.value

@@ -2,6 +2,9 @@ import { EventProps } from "./EventsPage"
 export default function Event({act,host,title,desc,time,date,location}: EventProps) {
     return (
         <div className={act}>
+            <div className= "edit__delete"></div>
+                <button>className = "edit__button"</button>
+                <button>className = "delete__button" </button>
             <div className = "event__body">
                 <div className='event__title'>{title}</div>
                 <p className='event__desc'>{desc}</p>
