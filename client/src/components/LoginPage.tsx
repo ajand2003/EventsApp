@@ -18,10 +18,15 @@ export default function LoginPage({handleLogIn}: LoginProps) {
             username: username,
             password: password
         }
-        const rs = await axios.post('http://localhost:5000/users/login', user)
-        if(rs!= null){
-            handleLogIn();
-        }
+        axios.post('http://localhost:5000/users/login', user)
+        .then(rs => {
+          handleLogIn();
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+  
+
     };
     const handleUserChange = (e: React.ChangeEvent<any>) => {
         const value = e.target.value;

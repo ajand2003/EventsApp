@@ -36,7 +36,7 @@ router.route('/login').post((req, res) => {
                 error: new Error('Wrong Password!')
               });
           } else {
-            return (user => res.json(user))
+            return res.json(user);
           }
         });
 });
