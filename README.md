@@ -1,2 +1,2 @@
-# Events-App_V1
-Sprint 1 of out Events App
+# Events-App-V2
+Sprint 2 of our Events App
