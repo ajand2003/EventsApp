@@ -18,4 +18,10 @@ router.route('/add').post((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
+router.route('/:username').delete((req, res) => {
+    User.findOneAndRemove(req.params.username)
+      .then(() => res.json('Event deleted.'))
+      .catch(err => res.status(400).json('Error: ' + err));
+  });
+
 module.exports = router;
