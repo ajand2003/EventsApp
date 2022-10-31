@@ -23,8 +23,8 @@ router.route('/:username').delete((req, res) => {
       .then(() => res.json('Event deleted.'))
       .catch(err => res.status(400).json('Error: ' + err));
   });
-router.route('/login').get((req, res) => {
-    console.log('hi');
+router.route('/login:username').get((req, res) => {
+    console.log(req.body.username);
     User.findOne({ username: req.body.username }).then(
         (user) => {
           if (!user) {

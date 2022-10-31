@@ -13,15 +13,17 @@ export default function LoginPage({handleLogIn}: LoginProps) {
     const [newAccount, setNewAccount] = useState(false);
     const {username,setUsername,password, setPassword,userType, setUserType} = useContext(UserContext)
     const handleSubmit = async (e: React.FormEvent) => {
-        axios.get('http://localhost:5000/users/')
-            .then(response => {
-                if (response.data.length > 0) {
-                    console.log('hi');
-                }
-              })
-              .catch((error) => {
-                console.log(error);
-              })
+        e.preventDefault();
+        axios.get('http://localhost:5000/users/login/')
+        .then(response => {
+          if (response.data.length > 0) {
+            console.log(response);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+  
 
     };
     const handleUserChange = (e: React.ChangeEvent<any>) => {
