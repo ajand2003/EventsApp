@@ -1,20 +1,28 @@
 import { useState, useContext } from "react"
 import { LoginProps } from "../App";
 import UserContext from "./UserContext";
+import CreateAccount from "./CreateAccount"
+import axios from "axios";
+
+export interface CreateAccountProps {
+    setNewAccount: (t: boolean) => void
+}
+
 export default function LoginPage({handleLogIn}: LoginProps) {
     const [isStarted, setIsStarted] = useState(false);
+    const [newAccount, setNewAccount] = useState(false);
     const {username,setUsername,password, setPassword,userType, setUserType} = useContext(UserContext)
     const handleSubmit = async (e: React.FormEvent) => {
-        const strippedUsername = username.replace(/\s+/g, '') //removes all whitespace from username
-        const strippedPassword = password.replace(/\s + /g, '');
-        e.preventDefault();  
-        if(strippedUsername === '' || userType === ''|| strippedPassword === '') {
-            alert("Please Fill In All Fields");
-        } else {
-            handleLogIn();
-        }
-        
-        
+        axios.get('http://localhost:5000/users/')
+            .then(response => {
+                if (response.data.length > 0) {
+                    console.log('hi');
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+              })
+
     };
     const handleUserChange = (e: React.ChangeEvent<any>) => {
         const value = e.target.value;
@@ -29,7 +37,8 @@ export default function LoginPage({handleLogIn}: LoginProps) {
         setUserType(value);
       };
   return (
-    <div className = 'login__page'>
+    <div>
+    {!newAccount && <div className = 'login__page'>
         {!isStarted && <button className="start__button" onClick = {() => {setIsStarted(true)}}>Start</button> }
         {isStarted &&
         <form className = "submit__form" onSubmit = {handleSubmit}>
@@ -53,9 +62,12 @@ export default function LoginPage({handleLogIn}: LoginProps) {
                 </select>
             </label>
             </div>
-            <button type = 'submit'>Log In</button>
+            <button className = 'login__button' type = 'submit'>Log In</button>
+            <button className = "create__account" onClick={() => {setNewAccount(true)}}>Create Account</button>
       </form>
         }
+    </div>}
+    {newAccount && <CreateAccount setNewAccount={setNewAccount}/>}
     </div>
   )
 }

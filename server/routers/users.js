@@ -23,5 +23,42 @@ router.route('/:username').delete((req, res) => {
       .then(() => res.json('Event deleted.'))
       .catch(err => res.status(400).json('Error: ' + err));
   });
+router.route('/login').get((req, res) => {
+    console.log('hi');
+    User.findOne({ username: req.body.username }).then(
+        (user) => {
+          if (!user) {
+            return res.status(401).json({
+              error: new Error('User not found!')
+            });
+          }
+          bcrypt.compare(req.body.password, user.password).then(
+            (valid) => {
+              if (!valid) {
+                return res.status(401).json({
+                  error: new Error('Incorrect password!')
+                });
+              }
+              res.status(200).json({
+                userId: user._id,
+                token: 'token'
+              });
+            }
+          ).catch(
+            (error) => {
+              res.status(500).json({
+                error: error
+              });
+            }
+          );
+        }
+      ).catch(
+        (error) => {
+          res.status(500).json({
+            error: error
+          });
+        }
+      );
+});
 
 module.exports = router;

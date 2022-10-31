@@ -8,6 +8,7 @@ import UserContext from './components/UserContext';
 import { BrowserRouter } from 'react-router-dom';
 import {Routes, Route} from 'react-router-dom';
 import Navbar from './components/Navbar';
+import CreateEvent from './components/CreateEvent';
 
 export interface LoginProps {
   handleLogIn: () => void
@@ -31,6 +32,7 @@ function App() {
             <Route path = "/" element = {<div><Navbar /><EventsPage /></div>}> </Route>
             <Route path = "/calendar" element = {<div><Navbar /></div>}></Route>
             <Route path = "/map" element = {<div><Navbar /></div>}> </Route>
+            <Route path = "/create" element = {<div><CreateEvent /></div>}> </Route>
           </Routes>
         </BrowserRouter>
           }
