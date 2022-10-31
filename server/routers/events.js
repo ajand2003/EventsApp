@@ -11,7 +11,6 @@ router.route('/add').post((req, res) => {
   const user = req.body.user;
   const location = req.body.location;
   const description = req.body.description;
-  const timeCreated = req.body.timeCreated;
   const date = Date.parse(req.body.date);
   const title = req.body.title;
 
@@ -20,7 +19,6 @@ router.route('/add').post((req, res) => {
     user,
     location,
     description,
-    timeCreated,
     date,
     title,
   });
@@ -48,7 +46,6 @@ router.route('/update/:id').post((req, res) => {
         event.user = req.body.user;
         event.location = req.body.location;
         event.description = req.body.description;
-        event.timeCreated = req.body.timeCreated;
         event.date = Date.parse(req.body.date);
         event.title = req.body.title;
 
