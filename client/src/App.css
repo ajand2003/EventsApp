@@ -161,6 +161,26 @@
   background-color: navy;
   font-size: 2rem;
 }
+.event__body {
+  display: flex;
+  flex-direction: column;
+}
+.edit__button {
+  width: 100%;
+  background-color:  rgb(164, 137, 15);
+  background-image: linear-gradient(to top, rgb(164, 137, 15) 0%, rgb(234, 195, 22) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.delete__button {
+  width: 100%;
+  background-color:  rgb(164, 137, 15);
+  background-image: linear-gradient(to top, rgb(164, 137, 15) 0%, rgb(234, 195, 22) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
 .add__event {
   text-decoration: none;
   margin: 1rem;

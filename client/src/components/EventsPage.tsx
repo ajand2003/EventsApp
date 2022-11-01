@@ -29,7 +29,7 @@ export default function EventsPage() {
       <button className = "add__event"  onClick = {() => {navigate("/create")}}>Add Event</button>
       <div className = 'event__container'>{events.map((index: number, i: number) => {
             return (
-              <Event act = "event__active" host = {events[i].title} title = {events[i].title} date = {events[i].date} time = {events[i].time} desc = {events[i].desc} location = {events[i].location}></Event>
+              <Event act = "event__active" host = {events[i].host} title = {events[i].title} date = {events[i].date} time = {events[i].time} desc = {events[i].desc} location = {events[i].location}></Event>
             );
           })}</div>
     </div>
