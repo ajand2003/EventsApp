@@ -7,6 +7,8 @@ export interface UserContext {
   setPassword: (newPassword: string) => void;
   userType: string;
   setUserType: (newUserType: string) => void;
+  eventId: string;
+  setEventId: (newUserType: string) => void;
 }
 
 const defaultState: UserContext = {
@@ -16,6 +18,10 @@ const defaultState: UserContext = {
   setPassword: () => {},
   userType: '',
   setUserType: () => {},
+  eventId: '',
+  setEventId: () => {},
+
+  
 };
 
 export default React.createContext(defaultState);
