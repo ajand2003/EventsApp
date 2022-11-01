@@ -15,7 +15,22 @@ export default function Event({act,host,title,desc,time,date,location,_id}: Even
     }
 
     const handleDelete = () => {
+        console.log(username)
+        console.log(host)
+        const config = {
+            data: {
+              id: " " + _id
+            }
+          }
+
+        if(username !== host && userType === "Student") {
+            alert('Incorrect Credentials');
+        }
         
+        else {
+            axios.delete('http://localhost:5000/events/delete', config)
+        }
+       
     }
 
     return (
@@ -29,7 +44,7 @@ export default function Event({act,host,title,desc,time,date,location,_id}: Even
         </div>
         <div className= "edit__delete">
             <button className = "edit__button" onClick = {() => {handleEdit()}}> EDIT</button>
-            <button className = "delete__button">DELETE</button>
+            <button className = "delete__button" onClick = {() => {handleDelete()}}>DELETE</button>
         </div>
         </div>
     )
