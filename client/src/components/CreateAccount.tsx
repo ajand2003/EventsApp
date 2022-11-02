@@ -22,7 +22,7 @@ export default function CreateEvent({setNewAccount}: CreateAccountProps) {
                 setNewAccount(false);
               })
               .catch((error) => {
-                alert('Username does not exist or incorrect password')
+                alert('Username already exists');
               })
         }
         setNewAccount(false);

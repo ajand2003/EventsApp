@@ -20,8 +20,6 @@ const defaultState: UserContext = {
   setUserType: () => {},
   eventId: '',
   setEventId: () => {},
-
-  
 };
 
 export default React.createContext(defaultState);

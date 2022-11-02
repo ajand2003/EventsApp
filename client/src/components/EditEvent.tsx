@@ -1,4 +1,11 @@
 import { useState, useContext } from "react"
+import axios from "axios";
+import UserContext from "./UserContext";
+import EventsPage, { EditProps, EventProps } from "./EventsPage"
+
+
+
+export default function EditEvent({removeEvent, index, setIsEditing}:EditProps) {
 import { useNavigate } from "react-router-dom"
 import axios from "axios";
 import UserContext from "./UserContext";
@@ -12,8 +19,7 @@ export default function EditEvent() {
     const [time, setTime] = useState('')
     const [location, setLocation] = useState('')
     const [desc, setDesc] = useState('')
-    const {username} = useContext(UserContext)
-    const navigate = useNavigate()
+    const {username, eventId} = useContext(UserContext)
     const handleSubmit = () => {
         const event = {
             title: title,
@@ -23,6 +29,19 @@ export default function EditEvent() {
             desc: desc,
             host: username
         }
+        const config = {
+            data: {
+              _id: eventId
+            }
+          }
+        axios.delete('http://localhost:5000/events/delete', config)
+        removeEvent(index);
+        axios.post('http://localhost:5000/events/add', event)
+        .then(rs => {
+            
+        })
+        setIsEditing(false);
+    }
         axios.post('http://localhost:5000/events/add', event)
         .then(rs => {
             console.log("Event Added");
@@ -42,8 +61,6 @@ export default function EditEvent() {
         }
         axios.delete('http://localhost:5000/events/delete', config)
     }
-
-    
 
     const handleTitleChange = (e: React.ChangeEvent<any>) => {
         const value = e.target.value
@@ -100,4 +117,5 @@ export default function EditEvent() {
       </form>
     </div>
   )
+}
 }

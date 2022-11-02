@@ -20,13 +20,13 @@ function App() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [userType, setUserType] = useState('');
-  const [eventId, setEventId] = useState('');
-
+  const [eventId, setEventId] = useState('')
+  
   const handleLogIn = () => {
     setIsLoggedIn(true);
   }
   return (
-    <UserContext.Provider value = {{username,setUsername,password,setPassword,userType,setUserType,eventId,setEventId}}>
+    <UserContext.Provider value = {{eventId, setEventId, username,setUsername,password,setPassword,userType,setUserType}
       <div className="App">
         {!isLoggedIn &&<LoginPage handleLogIn={handleLogIn}></LoginPage>}
         {isLoggedIn && 

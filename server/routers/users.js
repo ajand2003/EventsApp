@@ -16,8 +16,8 @@ router.route('/add').post((req, res) => {
     (user) => {
       if (!user) {
         newUser.save()
-        .then(() => res.json('User added!'))
-        .catch(err => res.status(400).json('Error: ' + err));
+          .then(() => res.json('User added!'))
+          .catch(err => res.status(400).json('Error: ' + err));
       } else {
         return res.status(401).json({
             error: new Error('Username already exists!')
@@ -27,7 +27,9 @@ router.route('/add').post((req, res) => {
 });
 
 router.route('/:username').delete((req, res) => {
-    User.findOneAndRemove(req.params.username)
+  const name = req.body.username
+  console.log(name);
+    User.findOneAndRemove({username: name})
       .then(() => res.json('User deleted.'))
       .catch(err => res.status(400).json('Error: ' + err));
   });
@@ -39,8 +41,6 @@ router.route('/login').post((req, res) => {
               error: new Error('User not found!')
             });
           } else if (user.password!=req.body.password || user.userType != req.body.userType){
-            console.log(user.password, user.userType)
-            console.log(req.body.userType)
             return res.status(401).json({
                 error: new Error('Wrong Password!')
               });
