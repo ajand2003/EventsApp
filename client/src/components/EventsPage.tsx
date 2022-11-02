@@ -22,6 +22,7 @@ export interface EventProps {
 export interface EditProps {
   removeEvent: (i: number) => void,
   setIsEditing: (t:boolean) => void,
+  setUpdate: (t:boolean) => void,
   index: number,
 }
 export default function EventsPage() {
@@ -99,7 +100,7 @@ export default function EventsPage() {
           })}</div>
     </div>
     }
-    {isEditing && <EditEvent  index = {eventClicked} setIsEditing = {setIsEditing} removeEvent = {removeEvent}/>}
+    {isEditing && <EditEvent  setUpdate = {setUpdate} index = {eventClicked} setIsEditing = {setIsEditing} removeEvent = {removeEvent}/>}
     </div>
   )
 }

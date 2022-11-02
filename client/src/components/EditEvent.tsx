@@ -5,7 +5,7 @@ import EventsPage, { EditProps, EventProps } from "./EventsPage"
 
 
 
-export default function EditEvent({removeEvent, index, setIsEditing}:EditProps) {
+export default function EditEvent({setUpdate, removeEvent, index, setIsEditing}:EditProps) {
     const [title, setTitle] = useState('')
     const [date, setDate] = useState('')
     const [time, setTime] = useState('')
@@ -33,6 +33,7 @@ export default function EditEvent({removeEvent, index, setIsEditing}:EditProps) 
             
         })
         setIsEditing(false);
+        setUpdate(true);
     }
     const handleTitleChange = (e: React.ChangeEvent<any>) => {
         const value = e.target.value
@@ -85,7 +86,7 @@ export default function EditEvent({removeEvent, index, setIsEditing}:EditProps) 
                     <textarea cols={50} rows = {10} name = "desc" placeholder="description"/>
                 </label>
             </div>     
-            <button className = "create__button" type = 'submit'>Create Event</button>
+            <button className = "create__button" type = 'submit'>Edit Event</button>
       </form>
     </div>
   )
