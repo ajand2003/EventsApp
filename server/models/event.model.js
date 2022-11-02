@@ -6,7 +6,7 @@ const eventSchema = new Schema({
   time: { type: String, required: true },
   desc: { type: String, required: true },
   location: { type: String, required: true },
-  date: { type: Date, required: true },
+  date: { type: String, required: true },
   host: {type: String, required: true},
   title: {type: String, required: true},
 }, {

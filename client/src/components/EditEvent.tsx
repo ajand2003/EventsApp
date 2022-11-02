@@ -1,16 +1,17 @@
 import { useState, useContext } from "react"
-import { useNavigate } from "react-router-dom"
 import axios from "axios";
 import UserContext from "./UserContext";
+import EventsPage, { EditProps, EventProps } from "./EventsPage"
 
-export default function CreateEvent() {
+
+
+export default function EditEvent({removeEvent, index, setIsEditing}:EditProps) {
     const [title, setTitle] = useState('')
     const [date, setDate] = useState('')
     const [time, setTime] = useState('')
     const [location, setLocation] = useState('')
     const [desc, setDesc] = useState('')
-    const {username} = useContext(UserContext)
-    const navigate = useNavigate()
+    const {username, eventId} = useContext(UserContext)
     const handleSubmit = () => {
         const event = {
             title: title,
@@ -20,11 +21,18 @@ export default function CreateEvent() {
             desc: desc,
             host: username
         }
+        const config = {
+            data: {
+              _id: eventId
+            }
+          }
+        axios.delete('http://localhost:5000/events/delete', config)
+        removeEvent(index);
         axios.post('http://localhost:5000/events/add', event)
         .then(rs => {
-            console.log("Event Added");
+            
         })
-        navigate('/')
+        setIsEditing(false);
     }
     const handleTitleChange = (e: React.ChangeEvent<any>) => {
         const value = e.target.value
@@ -32,7 +40,10 @@ export default function CreateEvent() {
     }
     const handleDateChange = (e: React.ChangeEvent<any>) => {
         const value = e.target.value
-        setDate(value)
+        Date.parse(value)
+        console.log(value)
+
+        setDate("" + Date.parse(value))
     }
     const handleTimeChange = (e: React.ChangeEvent<any>) => {
         const value = e.target.value
