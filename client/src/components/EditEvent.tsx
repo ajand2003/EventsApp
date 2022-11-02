@@ -6,6 +6,14 @@ import EventsPage, { EditProps, EventProps } from "./EventsPage"
 
 
 export default function EditEvent({removeEvent, index, setIsEditing}:EditProps) {
+import { useNavigate } from "react-router-dom"
+import axios from "axios";
+import UserContext from "./UserContext";
+import EventsPage, { EventProps } from "./EventsPage"
+
+
+
+export default function EditEvent() {
     const [title, setTitle] = useState('')
     const [date, setDate] = useState('')
     const [time, setTime] = useState('')
@@ -34,6 +42,26 @@ export default function EditEvent({removeEvent, index, setIsEditing}:EditProps) 
         })
         setIsEditing(false);
     }
+        axios.post('http://localhost:5000/events/add', event)
+        .then(rs => {
+            console.log("Event Added");
+        })
+
+        navigate('/')
+        DeleteOld()
+    }
+
+    const DeleteOld = () => {
+        const{eventId} = useContext(UserContext);
+        const config = {
+            data : {
+                _id : ""+ eventId
+            }
+
+        }
+        axios.delete('http://localhost:5000/events/delete', config)
+    }
+
     const handleTitleChange = (e: React.ChangeEvent<any>) => {
         const value = e.target.value
         setTitle(value)
@@ -89,4 +117,5 @@ export default function EditEvent({removeEvent, index, setIsEditing}:EditProps) 
       </form>
     </div>
   )
+}
 }

@@ -21,11 +21,12 @@ function App() {
   const [password, setPassword] = useState('');
   const [userType, setUserType] = useState('');
   const [eventId, setEventId] = useState('')
+  
   const handleLogIn = () => {
     setIsLoggedIn(true);
   }
   return (
-    <UserContext.Provider value = {{eventId, setEventId, username,setUsername,password,setPassword,userType,setUserType}}>
+    <UserContext.Provider value = {{eventId, setEventId, username,setUsername,password,setPassword,userType,setUserType}
       <div className="App">
         {!isLoggedIn &&<LoginPage handleLogIn={handleLogIn}></LoginPage>}
         {isLoggedIn && 
@@ -35,6 +36,7 @@ function App() {
             <Route path = "/calendar" element = {<div><Navbar /></div>}></Route>
             <Route path = "/map" element = {<div><Navbar /></div>}> </Route>
             <Route path = "/create" element = {<div><CreateEvent /></div>}> </Route>
+            <Route path = "/edit" element = {<div><EditEvent /></div>}> </Route>
           </Routes>
         </BrowserRouter>
           }
