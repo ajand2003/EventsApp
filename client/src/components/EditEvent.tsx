@@ -1,121 +1,105 @@
-import { useState, useContext } from "react"
+import {useContext, useEffect, useState } from "react"
+import UserContext from "./UserContext"
+import Event from "./Event";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import UserContext from "./UserContext";
-import EventsPage, { EditProps, EventProps } from "./EventsPage"
+import EditEvent from "./EditEvent";
 
-
-
-export default function EditEvent({removeEvent, index, setIsEditing}:EditProps) {
-import { useNavigate } from "react-router-dom"
-import axios from "axios";
-import UserContext from "./UserContext";
-import EventsPage, { EventProps } from "./EventsPage"
-
-
-
-export default function EditEvent() {
-    const [title, setTitle] = useState('')
-    const [date, setDate] = useState('')
-    const [time, setTime] = useState('')
-    const [location, setLocation] = useState('')
-    const [desc, setDesc] = useState('')
-    const {username, eventId} = useContext(UserContext)
-    const handleSubmit = () => {
-        const event = {
-            title: title,
-            date: date,
-            time: time,
-            location: location,
-            desc: desc,
-            host: username
+export interface EventProps {
+  removeEvent: (i: number) => void,
+  setIsEditing: (t:boolean) => void,
+  handleActive: (i:number) => void,
+  index: number,
+  act: string,
+  host:string,
+  title: string,
+  date: string, 
+  time: string,
+  location: string,
+  desc: string,
+  _id: string
+}
+export interface EditProps {
+  removeEvent: (i: number) => void,
+  setIsEditing: (t:boolean) => void,
+  index: number,
+}
+export default function EventsPage() {
+    const[events, setEvents] = useState<any>([]);
+    const [eventClicked, setEventClicked] = useState(0);
+    const[isEditing, setIsEditing] = useState(false)
+    const [active, setActive] = useState(-1);
+    const [update,setUpdate] = useState(false);
+    const [pageNumbers, setPageNumbers] = useState<any>([]);
+    const [currPage, setCurrPage] = useState(0);
+    const [currPages, setCurrPages] = useState<any>([]);
+    const navigate = useNavigate();
+    const removeEvent = (i: number) => {
+      let temp = events
+      temp.splice(i,1)
+      setEvents(temp);
+      setUpdate(true);
+    }
+    const handleActive = (i:number) => {
+      setActive(i);
+    }
+    const getNumPages = () => {
+      const pages = [];
+      for (let i = 0; i < Math.ceil(events.length / 10); i++) {
+        pages.push(i);
+      }
+      setPageNumbers(pages);
+    }
+    const getPageNumbers = () => {
+      const pages = []
+      let i = currPage-2;
+      while(pages.length < 5 && i < pageNumbers.length) {
+        if(i >= 0) {
+            pages.push(i)
         }
-        const config = {
-            data: {
-              _id: eventId
-            }
-          }
-        axios.delete('http://localhost:5000/events/delete', config)
-        removeEvent(index);
-        axios.post('http://localhost:5000/events/add', event)
-        .then(rs => {
-            
-        })
-        setIsEditing(false);
+        i++;
+      }
+      console.log(pages);
+      setCurrPages(pages);
     }
-        axios.post('http://localhost:5000/events/add', event)
-        .then(rs => {
-            console.log("Event Added");
-        })
-
-        navigate('/')
-        DeleteOld()
-    }
-
-    const DeleteOld = () => {
-        const{eventId} = useContext(UserContext);
-        const config = {
-            data : {
-                _id : ""+ eventId
-            }
-
-        }
-        axios.delete('http://localhost:5000/events/delete', config)
-    }
-
-    const handleTitleChange = (e: React.ChangeEvent<any>) => {
-        const value = e.target.value
-        setTitle(value)
-    }
-    const handleDateChange = (e: React.ChangeEvent<any>) => {
-        const value = e.target.value
-        Date.parse(value)
-        console.log(value)
-
-        setDate("" + Date.parse(value))
-    }
-    const handleTimeChange = (e: React.ChangeEvent<any>) => {
-        const value = e.target.value
-        setTime(value)
-    }
-    const handleLocationChange = (e: React.ChangeEvent<any>) => {
-        const value = e.target.value
-        setLocation(value)
-    }
-    const handleDescChange = (e: React.ChangeEvent<any>) => {
-        const value = e.target.value
-        setDesc(value)
-    }
+    useEffect(() => {
+      axios.get('http://localhost:5000/events/')
+      .then(rs => {
+        let temp = rs.data
+        setEvents(temp);
+      });
+    },[])
+    useEffect (() => {
+      axios.get('http://localhost:5000/events/')
+      .then(rs => {
+        let temp = rs.data
+        setEvents(temp);
+      });
+      setUpdate(false);
+    },[update])
+    useEffect (() => {
+      getNumPages();
+      getPageNumbers();
+    },[events])
+    useEffect (() => {
+      getPageNumbers();
+    },[currPage])
   return (
-    <div className = 'create__event'>
-        <form className = "submit__create" onSubmit = {handleSubmit}>
-            <div>
-            <label onChange={handleTitleChange}>
-            <input type="title" name="title" placeholder="title" />
-            </label>
-            </div>
-            <div>
-                <label onChange={handleDateChange}>
-                <input type="date" name="date" placeholder="date" />
-                </label>
-            </div>
-            <div>
-                <label onChange={handleTimeChange}>
-                    <input type="time" name="time" placeholder="time" />
-                </label>
-            </div>
-            <div>
-                <label onChange={handleLocationChange}>
-                    <input type="location" name="location" placeholder="location" />
-                </label>
-            </div>  
-            <div className="event__description">
-                <label onChange={handleDescChange}>
-                    <textarea cols={50} rows = {10} name = "desc" placeholder="description"/>
-                </label>
-            </div>     
-            <button className = "create__button" type = 'submit'>Create Event</button>
-      </form>
+    <div>
+    {!isEditing && <div className="events">
+      <button className = "add__event"  onClick = {() => {navigate("/create")}}>Add Event</button>
+      <div className = 'event__container'>{events.map((index: number, i: number) => {
+        if (Math.floor(i / 10) == currPage) {
+            return (
+              <div onClick = {() => setEventClicked(i)}><Event setIsEditing = {setIsEditing} removeEvent = {removeEvent} handleActive = {handleActive} index = {i} act = {active == i ? "event__active" : "not__active"} _id = {events[i]._id} host = {events[i].host} title = {events[i].title} date = {events[i].date} time = {events[i].time} desc = {events[i].desc} location = {events[i].location}></Event></div>
+            );}
+          })}</div>
+          <div className="pages">{currPages.map((index: number, i: number) => {
+            return <div className={(currPages[i] === currPage) ? "page__num__active":"page__num"} onClick={()=>setCurrPage(currPages[i])}>{currPages[i]+1}</div>
+          })}</div>
+    </div>
+    }
+    {isEditing && <EditEvent  index = {eventClicked} setIsEditing = {setIsEditing} removeEvent = {removeEvent}/>}
     </div>
   )
-}
 }

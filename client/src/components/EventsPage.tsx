@@ -96,8 +96,6 @@ export default function EventsPage() {
           })}</div>
           <div className="pages">{currPages.map((index: number, i: number) => {
             return <div className={(currPages[i] === currPage) ? "page__num__active":"page__num"} onClick={()=>setCurrPage(currPages[i])}>{currPages[i]+1}</div>
-              <Event act = "event__active" host = {events[i].host} title = {events[i].title} date = {events[i].date} time = {events[i].time} desc = {events[i].desc} location = {events[i].location} _id = {events[i].location}></Event>
-            );
           })}</div>
     </div>
     }
