@@ -3,7 +3,6 @@ import UserContext from "./UserContext";
 import {useContext} from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import EditEvent from "./EditEvent";
 export default function Event({setIsEditing, removeEvent, handleActive, index, _id, act,host,title,desc,time,date,location}: EventProps) {
     const{username, userType, setEventId} = useContext(UserContext)
     const navigate = useNavigate()

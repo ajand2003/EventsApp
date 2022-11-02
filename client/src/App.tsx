@@ -9,6 +9,7 @@ import { BrowserRouter } from 'react-router-dom';
 import {Routes, Route} from 'react-router-dom';
 import Navbar from './components/Navbar';
 import CreateEvent from './components/CreateEvent';
+import EditEvent from './components/EditEvent';
 
 export interface LoginProps {
   handleLogIn: () => void
@@ -24,7 +25,7 @@ function App() {
     setIsLoggedIn(true);
   }
   return (
-    <UserContext.Provider value = {{username,setUsername,password,setPassword,userType,setUserType,eventId,setEventId}}>
+    <UserContext.Provider value = {{eventId, setEventId, username,setUsername,password,setPassword,userType,setUserType}}>
       <div className="App">
         {!isLoggedIn &&<LoginPage handleLogIn={handleLogIn}></LoginPage>}
         {isLoggedIn && 

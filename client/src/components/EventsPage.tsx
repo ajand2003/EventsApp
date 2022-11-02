@@ -10,14 +10,14 @@ export interface EventProps {
   setIsEditing: (t:boolean) => void,
   handleActive: (i:number) => void,
   index: number,
-  _id: string,
   act: string,
   host:string,
   title: string,
   date: string, 
   time: string,
   location: string,
-  desc: string
+  desc: string,
+  _id: string
 }
 export interface EditProps {
   removeEvent: (i: number) => void,
