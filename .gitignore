@@ -1,0 +1,15 @@
+# node modules
+node_modules/
+
+# build directory
+/build
+
+# all files staritng with . or ~
+.*
+~*
+
+# track our git ignore
+!.gitignore
+
+
+
