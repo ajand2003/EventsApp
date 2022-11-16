@@ -14,6 +14,7 @@ router.route('/add').post((req, res) => {
   const date = req.body.date;
   const title = req.body.title;
   const time = req.body.time;
+  const rsvp = [];
 
 
   const newEvent = new Event({
@@ -23,6 +24,7 @@ router.route('/add').post((req, res) => {
     desc,
     date,
     title,
+    rsvp
   });
 
   newEvent.save()
