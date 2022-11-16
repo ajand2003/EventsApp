@@ -39,6 +39,7 @@ export default function Event({setIsEditing, removeEvent, handleActive, index, _
                 <div className = "event__body">
                     <div className='event__title'>{title}</div>
                     <p className='event__desc'>{desc}</p>
+                    <button className="rsvp__button">RSVP</button>
                 </div>
                 <ul><li className = "event__tags">{host}</li><li className = 'event__tags'>{date}</li><li className = 'event__tags'>{time}</li><li className = 'event__tags'>{location}</li></ul>
             </div>}
