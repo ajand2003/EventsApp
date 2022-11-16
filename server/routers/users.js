@@ -28,7 +28,6 @@ router.route('/add').post((req, res) => {
 
 router.route('/:username').delete((req, res) => {
   const name = req.body.username
-  console.log(name);
     User.findOneAndRemove({username: name})
       .then(() => res.json('User deleted.'))
       .catch(err => res.status(400).json('Error: ' + err));
