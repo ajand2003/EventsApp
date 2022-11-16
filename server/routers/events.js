@@ -1,4 +1,23 @@
+function addUserToList(arr, temp) {
+  arr.push(temp);
+} 
+
+function deleteUserFromList(arr, username) {
+  temp = [];
+  for(let i = 0; i < arr.length; i++) {
+    if(arr[i] == username) {
+      continue;
+    }
+    temp.push(arr[i])  
+  }
+
+  return temp;
+}
+
+
+
 const router = require('express').Router();
+const { events } = require('../models/event.model');
 let Event = require('../models/event.model');
 
 router.route('/').get((req, res) => {
@@ -7,14 +26,78 @@ router.route('/').get((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
+router.route('/deleteRSVPUser').post((req, res) => {
+  
+  Event.findById(req.body._id)
+  .then(event => {
+    s = req.body.status;
+    if (s == "Won't be Attending") {
+        event.wontAttendList = deleteUserFromList(event.wontAttendList, req.body.username);
+    }
+    else if (s == "Nemesis") {
+        event.nemesisAttendList = deleteUserFromList(event.nemesisAttendList, req.body.username);
+    }
+    else if (s == "Attending") {
+        event.willAttendList = deleteUserFromList(event.willAttendList, req.body.username);
+    }
+    else if (s == "Not sure") {
+        event.maybeAttendList = deleteUserFromList(event.maybeAttendList, req.body.username);
+    }
+  
+    event.save()
+        .then(() => res.json('RSVPlist updated!'))
+        .catch(err => res.status(400).json('Error: ' + err));
+  })
+  .catch(err => res.status(400).json('Error: ' + err));
+  
+
+});
+
+
+
+router.route('/addRSVPUser').post((req, res) => {
+
+  console.log(req.body._id)
+  Event.findById(req.body._id)
+  .then(event => {
+    s = req.body.status;
+    if (s == "Won't be Attending") {
+        addUserToList(event.wontAttendList, req.body.username);
+    }
+    else if (s == "Nemesis") {
+        addUserToList(event.nemesisAttendList, req.body.username);
+    }
+    else if (s == "Attending") {
+        addUserToList(event.willAttendList, req.body.username);
+    }
+    else if (s == "Not sure") {
+        addUserToList(event.maybeAttendList, req.body.username);
+    }
+  
+
+    event.save()
+        .then(() => res.json('RSVPlist updated!'))
+        .catch(err => res.status(400).json('Error: ' + err));
+  })
+  .catch(err => res.status(400).json('Error: ' + err));
+  
+
+});
+
 router.route('/add').post((req, res) => {
+
   const host = req.body.host;
   const location = req.body.location;
   const desc = req.body.desc;
   const date = req.body.date;
   const title = req.body.title;
   const time = req.body.time;
-  const rsvp = [];
+  const capacity = 50;
+  const willAttendList = [];
+  const maybeAttendList = [];
+  const wontAttendList = [];
+  const nemesisAttendList = [];
+  const rsvpList = [];
 
 
   const newEvent = new Event({
@@ -24,7 +107,13 @@ router.route('/add').post((req, res) => {
     desc,
     date,
     title,
-    rsvp
+    rsvpList,
+    willAttendList,
+    maybeAttendList, 
+    wontAttendList, 
+    nemesisAttendList,
+    capacity,
+    
   });
 
   newEvent.save()
@@ -37,6 +126,7 @@ router.route('/:id').get((req, res) => {
     .then(event => res.json(event))
     .catch(err => res.status(400).json('Error: ' + err));
 });
+
 
 router.route('/:id').delete((req, res) => {
   Event.findOneAndRemove({_id: req.body._id})
