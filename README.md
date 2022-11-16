@@ -1,5 +1,7 @@
 # Events-App-V3
-Sprint 2 of our Events App
+Sprint 3 of our Events App
+
+Main objective: add RSVP functionality
 
 ## Usage
 ```
@@ -18,6 +20,8 @@ You may have an issue with linking to MongoDB because your IP address isn't list
 
 ## TODO
 * Hook create acount to login, so after you create an account you are redirected to login
+* Move database variables to .env file
+* If no database connection: give output to console before starting front end; you can try to login for ~2 minutes before you realize the connection was never established
 
 
 
