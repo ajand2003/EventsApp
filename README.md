@@ -23,5 +23,12 @@ You may have an issue with linking to MongoDB because your IP address isn't list
 * Move database variables to .env file
 * If no database connection: give output to console before starting front end; you can try to login for ~2 minutes before you realize the connection was never established
 
+## Looking ahead
+If we use the @googlemaps/react-wrapper for our map then we might want initial conditions to be zoom, lat, long as below:
+
+16
+33.776975498863216
+-84.39714349784722
+
 
 
