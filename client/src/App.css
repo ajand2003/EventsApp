@@ -191,6 +191,13 @@
 .event__title {
   padding: 0rem 1rem 0rem 1rem;
 }
+.rsvp__button{
+  margin-top: auto;
+  background-color: aliceblue;
+}
+.rsvp__button:hover{
+  background-color: cadetblue;
+}
 .edit__button {
   width: 100%;
   background-color:  rgb(164, 137, 15);
