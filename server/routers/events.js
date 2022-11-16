@@ -57,10 +57,15 @@ router.route('/deleteRSVPUser').post((req, res) => {
 
 router.route('/addRSVPUser').post((req, res) => {
 
-  console.log(req.body._id)
+  
   Event.findById(req.body._id)
   .then(event => {
     s = req.body.status;
+    event.wontAttendList = deleteUserFromList(event.wontAttendList, req.body.username);
+    event.nemesisAttendList = deleteUserFromList(event.nemesisAttendList, req.body.username);
+    event.willAttendList = deleteUserFromList(event.willAttendList, req.body.username);
+    event.maybeAttendList = deleteUserFromList(event.maybeAttendList, req.body.username);
+    console.log(s)
     if (s == "Won't be Attending") {
         addUserToList(event.wontAttendList, req.body.username);
     }
