@@ -185,17 +185,31 @@
   font-size: 2rem;
 }
 .event__body {
+  min-width: 200px;
   display: flex;
   flex-direction: column;
 }
 .event__title {
   padding: 0rem 1rem 0rem 1rem;
 }
-.rsvp__button{
+.rsvp__buttons{
+  width:100%;
   margin-top: auto;
-  background-color: aliceblue;
+  display: flex;
+  justify-content: space-around;
+}
+.rsvp__button{
+  border-radius: 1rem;
+  background-color: white;
 }
 .rsvp__button:hover{
+  background-color: cadetblue;
+}
+.view__list{
+  border-radius: 1rem;
+  background-color: white;
+}
+.view__list:hover{
   background-color: cadetblue;
 }
 .edit__button {

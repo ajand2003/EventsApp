@@ -40,7 +40,7 @@ router.route('/deleteRSVPUser').post((req, res) => {
     else if (s == "Attending") {
         event.willAttendList = deleteUserFromList(event.willAttendList, req.body.username);
     }
-    else if (s == "Not sure") {
+    else if (s == "Not Sure") {
         event.maybeAttendList = deleteUserFromList(event.maybeAttendList, req.body.username);
     }
   
@@ -58,6 +58,7 @@ router.route('/deleteRSVPUser').post((req, res) => {
 router.route('/addRSVPUser').post((req, res) => {
 
   console.log(req.body._id)
+  console.log(req.body.status)
   Event.findById(req.body._id)
   .then(event => {
     s = req.body.status;
@@ -70,7 +71,7 @@ router.route('/addRSVPUser').post((req, res) => {
     else if (s == "Attending") {
         addUserToList(event.willAttendList, req.body.username);
     }
-    else if (s == "Not sure") {
+    else if (s == "Not Sure") {
         addUserToList(event.maybeAttendList, req.body.username);
     }
   
