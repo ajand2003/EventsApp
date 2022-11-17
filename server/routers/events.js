@@ -40,10 +40,12 @@ router.route('/deleteRSVPUser').post((req, res) => {
     else if (s == "Attending") {
         event.willAttendList = deleteUserFromList(event.willAttendList, req.body.username);
     }
-    else if (s == "Not sure") {
+    else if (s == "Not Sure") {
         event.maybeAttendList = deleteUserFromList(event.maybeAttendList, req.body.username);
     }
-  
+    else if (s == "Invite") {
+      event.inviteList = deleteUserFromList(event.inviteList, req.body.username);
+    }
     event.save()
         .then(() => res.json('RSVPlist updated!'))
         .catch(err => res.status(400).json('Error: ' + err));
@@ -56,16 +58,29 @@ router.route('/deleteRSVPUser').post((req, res) => {
 
 
 router.route('/addRSVPUser').post((req, res) => {
-
-  
   Event.findById(req.body._id)
   .then(event => {
+    if(event.invite) {
+      let in_list = false;
+      for (let i = 0; i < event.inviteList.length; i++) {
+        console.log('hi')
+        console.log(event.inviteList[i], req.body.username);
+        if(event.inviteList[i] == req.body.username) {
+          in_list = true;
+          break;
+        }
+      }
+      if(!in_list){
+        return res.status(401).json({
+          error: new Error('You Cannot Join this Event')
+        });
+      }
+    }
     s = req.body.status;
     event.wontAttendList = deleteUserFromList(event.wontAttendList, req.body.username);
     event.nemesisAttendList = deleteUserFromList(event.nemesisAttendList, req.body.username);
     event.willAttendList = deleteUserFromList(event.willAttendList, req.body.username);
     event.maybeAttendList = deleteUserFromList(event.maybeAttendList, req.body.username);
-    console.log(s)
     if (s == "Won't be Attending") {
         addUserToList(event.wontAttendList, req.body.username);
     }
@@ -73,9 +88,10 @@ router.route('/addRSVPUser').post((req, res) => {
         addUserToList(event.nemesisAttendList, req.body.username);
     }
     else if (s == "Attending") {
+        console.log('yo')
         addUserToList(event.willAttendList, req.body.username);
     }
-    else if (s == "Not sure") {
+    else if (s == "Not Sure") {
         addUserToList(event.maybeAttendList, req.body.username);
     }
   
@@ -88,7 +104,24 @@ router.route('/addRSVPUser').post((req, res) => {
   
 
 });
-
+router.route('/addInvite').post((req,res) => {
+  Event.findById(req.body._id)
+  .then(event => {
+    addUserToList(event.inviteList, req.body.username)
+    event.save()
+        .then(() => res.json('Invite List Updated!'))
+        .catch(err => res.status(400).json('Error: ' + err));
+  })
+});
+router.route('/removeInvite').post((req,res) => {
+  Event.findById(req.body._id)
+  .then(event => {
+    event.inviteList = deleteUserFromList(event.inviteList, req.body.username)
+    event.save()
+        .then(() => res.json('Invite List Updated!'))
+        .catch(err => res.status(400).json('Error: ' + err));
+  })
+});
 router.route('/add').post((req, res) => {
 
   const host = req.body.host;
@@ -97,12 +130,13 @@ router.route('/add').post((req, res) => {
   const date = req.body.date;
   const title = req.body.title;
   const time = req.body.time;
-  const capacity = 50;
+  const invite = req.body.invite;
+  const inviteList = [];
+  const capacity = req.body.capacity;
   const willAttendList = [];
   const maybeAttendList = [];
   const wontAttendList = [];
   const nemesisAttendList = [];
-  const rsvpList = [];
 
 
   const newEvent = new Event({
@@ -112,7 +146,8 @@ router.route('/add').post((req, res) => {
     desc,
     date,
     title,
-    rsvpList,
+    invite,
+    inviteList,
     willAttendList,
     maybeAttendList, 
     wontAttendList, 
@@ -120,7 +155,7 @@ router.route('/add').post((req, res) => {
     capacity,
     
   });
-
+  console.log(newEvent);
   newEvent.save()
   .then(() => res.json('Event added!'))
   .catch(err => res.status(400).json('Error: ' + err));
@@ -132,13 +167,16 @@ router.route('/:id').get((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
-
 router.route('/:id').delete((req, res) => {
   Event.findOneAndRemove({_id: req.body._id})
     .then(() => res.json('Event deleted.'))
     .catch(err => res.status(400).json('Error: ' + err));
 });
-
+router.route('/deleteAll').post((req,res) => {
+  Event.deleteMany({})
+  .then()
+  .catch()
+});
 router.route('/update/:id').post((req, res) => {
   Event.findById(req.params.id)
     .then(event => {

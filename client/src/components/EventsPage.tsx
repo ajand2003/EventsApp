@@ -60,7 +60,6 @@ export default function EventsPage() {
         }
         i++;
       }
-      console.log(pages);
       setCurrPages(pages);
     }
     useEffect(() => {

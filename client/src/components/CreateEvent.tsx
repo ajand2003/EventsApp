@@ -9,6 +9,8 @@ export default function CreateEvent() {
     const [time, setTime] = useState('')
     const [location, setLocation] = useState('')
     const [desc, setDesc] = useState('')
+    const [capacity, setCapacity] = useState(0);
+    const [invite, setInvite] = useState(false);
     const {username} = useContext(UserContext)
     const navigate = useNavigate()
     const handleSubmit = () => {
@@ -18,8 +20,11 @@ export default function CreateEvent() {
             time: time,
             location: location,
             desc: desc,
-            host: username
+            host: username,
+            capacity: capacity,
+            invite: invite
         }
+        console.log(event);
         axios.post('http://localhost:5000/events/add', event)
         .then(rs => {
             console.log("Event Added");
@@ -46,6 +51,18 @@ export default function CreateEvent() {
         const value = e.target.value
         setDesc(value)
     }
+    const handleCapacityChange = (e: React.ChangeEvent<any>) => {
+        const value = e.target.value
+        setCapacity(value)
+    }
+    const handleInvite = (e: React.ChangeEvent<any>) => {
+        const value = e.target.value
+        if (value == "Invite") {
+            setInvite(true);
+        } else {
+            setInvite(false);
+        }
+    }
   return (
     <div className = 'create__event'>
         <form className = "submit__create" onSubmit = {handleSubmit}>
@@ -69,6 +86,19 @@ export default function CreateEvent() {
                     <input type="location" name="location" placeholder="location" />
                 </label>
             </div>  
+            <div>
+                <label onChange = {handleCapacityChange}>
+                    <input type = "number" name = "capacity" placeholder="capacity" min = "1" max = "100000"></input>
+                </label>
+            </div>
+            <div>
+                <label onChange = {handleInvite}>
+                    <select defaultValue = "Open">
+                        <option value = "Open">Open</option>
+                        <option value = "Invite">Invite Only</option>
+                    </select>
+                </label>
+            </div>
             <div className="event__description">
                 <label onChange={handleDescChange}>
                     <textarea cols={50} rows = {10} name = "desc" placeholder="description"/>

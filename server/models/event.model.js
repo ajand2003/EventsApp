@@ -9,12 +9,13 @@ const eventSchema = new Schema({
   date: { type: String, required: true },
   host: {type: String, required: true},
   title: {type: String, required: true},
-  rsvpList: {type: Array, required: true},
   willAttendList: {type: Array, required: true},
   maybeAttendList: {type: Array, required: true},
   wontAttendList: {type: Array, required: true},
   nemesisAttendList: {type: Array, required: true},
-  capacity:{type: Number, required: true}
+  invite: {type: Boolean, required: true},
+  inviteList: {type: Array, required: true},
+  capacity: {type: Number, required: true},
 }, {
   timestamps: true,
 });
