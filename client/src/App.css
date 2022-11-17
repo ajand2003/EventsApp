@@ -212,6 +212,14 @@
 .view__list:hover{
   background-color: cadetblue;
 }
+.view__event{
+  margin-bottom: 0.5rem;
+  border-radius: 1rem;
+  background-color: white;
+}
+.view__event:hover{
+  background-color: cadetblue;
+}
 .edit__button {
   width: 100%;
   background-color:  rgb(164, 137, 15);
@@ -221,6 +229,14 @@
   justify-content: space-around;
 }
 .delete__button {
+  width: 100%;
+  background-color:  rgb(164, 137, 15);
+  background-image: linear-gradient(to top, rgb(164, 137, 15) 0%, rgb(234, 195, 22) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.invite__button {
   width: 100%;
   background-color:  rgb(164, 137, 15);
   background-image: linear-gradient(to top, rgb(164, 137, 15) 0%, rgb(234, 195, 22) 100%);
@@ -244,6 +260,7 @@
   transform: scale(1.1);
 }
 .create__event{
+  margin-top: 5vh;
   min-height: 87vh;
   display: flex;
   align-items: center;
@@ -292,4 +309,63 @@ textarea[name=desc] {
   background-color: rgb(164, 137, 15);
   color: white;
   padding: 1rem;
+}
+.rsvp__list{
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0rem 0rem 1rem 0rem grey;
+  background-color:  rgb(164, 137, 15);
+  background-image: linear-gradient(to top, rgb(164, 137, 15) 0%, rgb(234, 195, 22) 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 0 0 0;
+  overflow: hidden;
+  max-height: 100%;
+  min-width: 30vw;
+  min-height: 30vh;
+}
+.rsvp__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 0 0 0;
+  overflow: hidden;
+}
+.rsvp__title{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1rem;
+  background-color: navy;
+  font-size: 2rem;
+}
+.names__list {
+  width: 100%;
+  list-style: none;
+  columns: 2
+}
+.rsvp__arrows {
+  font-size: 1.5rem;
+  width: 100%;
+  margin-top: auto;
+  display: flex;
+  justify-content: space-around;
+  color: white;
+}
+.rsvp__left__arrow:hover {
+  color:navy;
+}
+.rsvp__right__arrow:hover {
+  color:navy;
+}
+.names__list {
+  font-size: 1.2rem;
+}
+.list__name__deletable:hover {
+  cursor: pointer;
+  text-decoration: line-through;
 }

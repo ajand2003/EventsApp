@@ -34,7 +34,7 @@ function App() {
             <Route path = "/" element = {<div><Navbar /><EventsPage /></div>}> </Route>
             <Route path = "/calendar" element = {<div><Navbar /></div>}></Route>
             <Route path = "/map" element = {<div><Navbar /></div>}> </Route>
-            <Route path = "/create" element = {<div><CreateEvent /></div>}> </Route>
+            <Route path = "/create" element = {<div><Navbar /><CreateEvent /></div>}> </Route>
           </Routes>
         </BrowserRouter>
           }

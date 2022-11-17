@@ -13,7 +13,9 @@ const eventSchema = new Schema({
   maybeAttendList: {type: Array, required: true},
   wontAttendList: {type: Array, required: true},
   nemesisAttendList: {type: Array, required: true},
-  capacity:{type: Number, required: true}
+  invite: {type: Boolean, required: true},
+  inviteList: {type: Array, required: true},
+  capacity: {type: Number, required: true},
 }, {
   timestamps: true,
 });

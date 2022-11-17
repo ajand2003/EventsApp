@@ -13,8 +13,8 @@ export default function CreateEvent({setNewAccount}: CreateAccountProps) {
             alert("Please Fill In All Fields");
         } else {
             const user = {
-                username: username,
-                password: password,
+                username: strippedUsername,
+                password: strippedPassword,
                 userType: userType
             }
             axios.post('http://localhost:5000/users/add', user)
