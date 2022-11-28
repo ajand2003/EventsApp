@@ -32,5 +32,9 @@ If we use the @googlemaps/react-wrapper for our map then we might want initial c
 33.776975498863216
 -84.39714349784722
 
+## Map
+
+Check the map branch for map implementation. The changes are MapInit and MapPage 
+
 
 
