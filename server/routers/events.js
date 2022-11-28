@@ -20,14 +20,14 @@ let Event = require('../models/event.model');
 
 // main events/ route
 router.route('/').get(async(req, res) => {
-  const match = {}
+  console.log(req);
   // query variable is set
   if (req.query.sort)
   {
     if (req.query.sort == "open") {//path is ?sort=open
       console.log("Searching for open");
-      // Right now it finds events whose capacity is greater than 10, but we need it to find events whose capacity is > length of invite list
-      Event.find({capacity: {$gt: 10}})
+      // If the capacity index doesn't exist in the willAttendList then we it is open
+      Event.find({"willAttendList.capacity": {"$exists": false}})
       .then(events => res.json(events))
       .catch(err => res.status(400).json('Error: ' + err));
     }
@@ -223,16 +223,6 @@ router.route('/update/:id').post((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
     })
     .catch(err => res.status(400).json('Error: ' + err));
-});
-
-// router path for sorting by open events
-router.get((req, res) => {
-  const match = {}
-  if (req.query.sort)
-  {
-    match.open = req.query.sort === "open";
-  }
-  res.json("Sup pen sucker");
 });
 
 module.exports = router;
