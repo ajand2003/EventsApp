@@ -193,4 +193,12 @@ router.route('/update/:id').post((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
+router.route('/map').get((req, res) => {
+  Event.find()
+    .then(events => res.json(events))
+    .catch(err => res.status(400).json('Error: ' + err));
+  console.log("Clicked on the map")
+
+});
+
 module.exports = router;
