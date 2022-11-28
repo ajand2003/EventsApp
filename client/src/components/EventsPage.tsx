@@ -112,12 +112,13 @@ export default function EventsPage() {
   return (
     <div>
     {!isEditing && <div className="events">
+
       <button className = "add__event"  onClick = {() => {navigate("/create")}}>Add Event</button>
 
       {/* If we want to convert the fitlers to buttons it would look like the following */}
       {/* <button className = "add__event"  onClick = {() => handleFilter("open")}>Filter for open events</button> */}
-  
-      <select onChange={e => handleFilter(e)}>
+      <label>Filter:</label>
+      <select className = "add__event" onChange={e => handleFilter(e)}>
         {
           Option.map((option: string, key) => <option value={option}>{option}</option>)
         }
