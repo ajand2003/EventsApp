@@ -14,16 +14,48 @@ function deleteUserFromList(arr, username) {
   return temp;
 }
 
-
-
 const router = require('express').Router();
 const { events } = require('../models/event.model');
 let Event = require('../models/event.model');
 
-router.route('/').get((req, res) => {
-  Event.find()
-    .then(events => res.json(events))
-    .catch(err => res.status(400).json('Error: ' + err));
+// main events/ route
+router.route('/').get(async(req, res) => {
+  const match = {}
+  // query variable is set
+  if (req.query.sort)
+  {
+    if (req.query.sort == "open") {//path is ?sort=open
+      console.log("Searching for open");
+      // Right now it finds events whose capacity is greater than 10, but we need it to find events whose capacity is > length of invite list
+      Event.find({capacity: {$gt: 10}})
+      .then(events => res.json(events))
+      .catch(err => res.status(400).json('Error: ' + err));
+    }
+    else if (req.query.sort == "name") {
+      console.log("Filtering by name");
+      Event.find()
+        .sort({title:1})
+        .then(events => res.json(events))
+        .catch(err => res.status(400).json('Error: ' + err));
+    }
+    else if (req.query.sort == "date") {
+      console.log("Filtering by date");
+      Event.find()
+        .sort({date:1, time:1})
+        .then(events => res.json(events))
+        .catch(err => res.status(400).json('Error: ' + err));
+    } 
+    else // if the query variable is not open, name, date then return all events
+    {
+      Event.find()
+        .then(events => res.json(events))
+        .catch(err => res.status(400).json('Error: ' + err));
+    }
+  } else {// if the query variable is not set then return all events
+    Event.find()
+      .then(events => res.json(events))
+      .catch(err => res.status(400).json('Error: ' + err));
+  }
 });
 
 router.route('/deleteRSVPUser').post((req, res) => {
@@ -191,6 +223,16 @@ router.route('/update/:id').post((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
     })
     .catch(err => res.status(400).json('Error: ' + err));
+});
+
+// router path for sorting by open events
+router.get((req, res) => {
+  const match = {}
+  if (req.query.sort)
+  {
+    match.open = req.query.sort === "open";
+  }
+  res.json("Sup pen sucker");
 });
 
 module.exports = router;

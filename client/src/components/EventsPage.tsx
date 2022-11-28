@@ -35,6 +35,17 @@ export default function EventsPage() {
     const [currPage, setCurrPage] = useState(0);
     const [currPages, setCurrPages] = useState<any>([]);
     const navigate = useNavigate();
+
+    // Function to hanl
+    const openFilter = () => {
+      axios.get('http://localhost:5000/events?sort=open')
+      .then(rs => {
+        let temp = rs.data
+        setEvents(temp);
+      });
+    }
+
+
     const removeEvent = (i: number) => {
       let temp = events
       temp.splice(i,1)
@@ -88,6 +99,16 @@ export default function EventsPage() {
     <div>
     {!isEditing && <div className="events">
       <button className = "add__event"  onClick = {() => {navigate("/create")}}>Add Event</button>
+
+      {/* Dropdown for filters */}
+      <select>
+        {/* Need onChange event handlers, current handler isn't working */}
+        <option>No filter</option>
+        <option onChange={() => openFilter()} >Open</option>
+        <option>Name</option>
+        <option>Name</option>
+      </select>
+
       <div className = 'event__container'>{events.map((index: number, i: number) => {
         if (Math.floor(i / 10) == currPage) {
             return (
