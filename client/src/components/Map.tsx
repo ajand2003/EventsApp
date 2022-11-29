@@ -10,19 +10,11 @@ type DirectionsResult = google.maps.DirectionsResult;
 type MapOptions = google.maps.MapOptions;
 
 export default function Map() {
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyBk-lyNX8YTht2lFdbAjvEguL9C1K6l9vE",
-  });
-
-  if (!isLoaded) return <div>Loading...</div>;
-  return <MapLoader />;
-}
-
-function MapLoader() {
   const {eventId} = useContext(UserContext);
   const[events, setEvents] = useState<any>([]);
   const [center,setCenter] = useState({ lat: 33.7759456, lng: -84.3965694 })
   const [currEvent, setCurrEvent] = useState<any>(null);
+  const {sorting} = useContext(UserContext);
   const options = useMemo<MapOptions>(
     () => ({
       disableDefaultUI: true,
@@ -38,14 +30,19 @@ function MapLoader() {
     setCurrEvent(null);
   });
   useEffect(() => {
-    axios.get('http://localhost:5000/events/')
+    const params = {
+      sort : sorting
+    }
+    axios.get('http://localhost:5000/events', {params})
     .then(rs => {
       let temp = rs.data
       setEvents(temp);
-    });
+    })
+    .catch((error) => {
+      alert('Cannot apply filter');
+    });   
   },[])
   useEffect(() => {
-    console.log(eventId)
     for (let i = 0; i < events.length; i++) {
       if(eventId == events[i]._id) {
         setCenter(events[i].latlng);

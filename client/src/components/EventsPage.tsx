@@ -25,7 +25,10 @@ export interface EditProps {
   setUpdate: (t:boolean) => void,
   index: number,
 }
-export default function EventsPage() {
+interface EventsPageProps {
+  personal?: Boolean
+}
+export default function EventsPage({personal = false}: EventsPageProps) {
     const[events, setEvents] = useState<any>([]);
     const [eventClicked, setEventClicked] = useState(0);
     const[isEditing, setIsEditing] = useState(false)
@@ -35,19 +38,15 @@ export default function EventsPage() {
     const [currPage, setCurrPage] = useState(0);
     const [currPages, setCurrPages] = useState<any>([]);
     const navigate = useNavigate();
-    let dropdown_state = "No filter";
-    const [selectedOption, setSelectedOption] = useState(["None", "open", "date", "name"]);
-    const Option = selectedOption.map(Option => Option);
-
+    const {sorting, setSorting, username} = useContext(UserContext);
     // Function to handle the filter
     const handleFilter = (option: React.ChangeEvent<HTMLSelectElement>) => {
-      console.log("Entered filter handler function");
-      console.log(option.target.value);
-    
       // const handleOptionChange = (e) => console.log((selectedOption[e.target.value]));
       // query parameters: can either be open, name or date
+      setSorting(option.target.value);
       const params = {
-        sort : option.target.value
+        sort : option.target.value,
+        username: username
       }
       axios.get('http://localhost:5000/events', {params})
       .then(rs => {
@@ -67,7 +66,11 @@ export default function EventsPage() {
       setUpdate(true);
     }
     const handleActive = (i:number) => {
-      setActive(i);
+      if (i == active) {
+        setActive(-1)
+      } else {
+        setActive(i);
+      }
     }
     const getNumPages = () => {
       const pages = [];
@@ -88,18 +91,47 @@ export default function EventsPage() {
       setCurrPages(pages);
     }
     useEffect(() => {
-      axios.get('http://localhost:5000/events/')
+      console.log(personal)
+      let params;
+      if(!personal && (sorting == 'created' || sorting == 'rsvp')) {
+        console.log('adisio')
+        setSorting("None")
+        params = {
+          sort : "None",
+          username: username
+        }
+      } else {
+        params = {
+          sort : sorting,
+          username: username
+        }
+      }
+      axios.get('http://localhost:5000/events', {params})
       .then(rs => {
         let temp = rs.data
         setEvents(temp);
-      });
+      })
     },[])
     useEffect (() => {
-      axios.get('http://localhost:5000/events/')
+      let params;
+      if(!personal && (sorting == 'created' || sorting == 'rsvp')) {
+        console.log('adisio')
+        setSorting("None")
+        params = {
+          sort : "None",
+          username: username
+        }
+      } else {
+        params = {
+          sort : sorting,
+          username: username
+        }
+      }
+      axios.get('http://localhost:5000/events', {params})
       .then(rs => {
         let temp = rs.data
         setEvents(temp);
-      });
+      })
       setUpdate(false);
     },[update])
     useEffect (() => {
@@ -113,16 +145,18 @@ export default function EventsPage() {
     <div>
     {!isEditing && <div className="events">
 
-      <button className = "add__event"  onClick = {() => {navigate("/create")}}>Add Event</button>
+      {personal && <button className = "add__event"  onClick = {() => {navigate("/create")}}>Add Event</button>}
 
       {/* If we want to convert the fitlers to buttons it would look like the following */}
       {/* <button className = "add__event"  onClick = {() => handleFilter("open")}>Filter for open events</button> */}
-      <label>Filter:</label>
-      <select className = "add__event" onChange={e => handleFilter(e)}>
-        {
-          Option.map((option: string, key) => <option value={option}>{option}</option>)
-        }
+      {!personal && <div><label>Filter:</label>
+      <select className = "add__event" onChange={handleFilter} defaultValue = {sorting}>
+        <option value ="None">None</option>
+        <option value="open">Open</option>
+        <option value="name">Name</option>
+        <option value="date">Date</option>
       </select>
+      </div>}
 
       <div className = 'event__container'>{events.map((index: number, i: number) => {
         if (Math.floor(i / 10) == currPage) {

@@ -21,8 +21,8 @@ function Navbar() {
               <li className="navbar__item">
               <NavLink
                     className={({isActive}) => (isActive ? 'active' : 'navbar__links')}
-                    to="/calendar"> 
-                Calendar
+                    to="/my_events"> 
+                My Events
               </NavLink>
               </li>
               <li className="navbar__item">

@@ -9,6 +9,8 @@ export interface UserContext {
   setUserType: (newUserType: string) => void;
   eventId: string;
   setEventId: (newUserType: string) => void;
+  sorting: string;
+  setSorting: (newString: string) => void;
 }
 
 const defaultState: UserContext = {
@@ -20,6 +22,8 @@ const defaultState: UserContext = {
   setUserType: () => {},
   eventId: '',
   setEventId: () => {},
+  sorting: '',
+  setSorting: () => {}
 };
 
 export default React.createContext(defaultState);

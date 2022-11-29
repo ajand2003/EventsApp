@@ -109,7 +109,7 @@ export default function Event({setIsEditing, removeEvent, handleActive, index, _
             {(act === "event__active" || act === "map__event__active") && !viewList && !inviting &&
                 <div className={act}>
                     <div className = "event__body">
-                        <div className='event__title'>{title}</div>
+                        <div className='event__title' onClick = {() => {handleActive(index)}}>{title}</div>
                         <p className='event__desc'>{desc}</p>
                         <div className = 'rsvp__buttons'>
                             <label>

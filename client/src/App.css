@@ -164,6 +164,7 @@
   margin: 0 0 0 0;
   overflow: hidden;
 }
+
 .event__tags__container {
   list-style: none;
   max-width: 40%;
@@ -463,4 +464,37 @@ textarea[name=desc] {
   margin: 0 0 0 0;
   overflow: hidden;
   max-height: 100%;
+}
+/*My Events */
+.my__events__selector__container {
+  background: navy;
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  font-size: 4vh;
+}
+.event__selector__menu {
+  color: white;
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+.event__selector__menu li:hover{
+  cursor: pointer;
+}
+.my__events__active {
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  padding: 0 1rem;
+  height: 100%;
+  background-color: white;
+  color: rgb(50, 50, 100);
 }

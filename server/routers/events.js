@@ -21,7 +21,7 @@ let Event = require('../models/event.model');
 // main events/ route
 router.route('/').get(async(req, res) => {
   // query variable is set
-  if (req.query.sort)
+  if (req.query.sort && !req.query.personal)
   {
     if (req.query.sort == "open") {
       Event.find()
@@ -38,6 +38,7 @@ router.route('/').get(async(req, res) => {
     }
     else if (req.query.sort == "name") {
       Event.find()
+        .collation({locale: "en" })
         .sort({title:1})
         .then(events => res.json(events))
         .catch(err => res.status(400).json('Error: ' + err));
@@ -45,6 +46,11 @@ router.route('/').get(async(req, res) => {
     else if (req.query.sort == "date") {
       Event.find()
         .sort({date:1, time:1})
+        .then(events => res.json(events))
+        .catch(err => res.status(400).json('Error: ' + err));
+    } 
+    else if (req.query.sort == "created") {
+      Event.find({host: req.query.username})
         .then(events => res.json(events))
         .catch(err => res.status(400).json('Error: ' + err));
     } 
