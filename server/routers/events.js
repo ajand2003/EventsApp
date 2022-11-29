@@ -20,26 +20,29 @@ let Event = require('../models/event.model');
 
 // main events/ route
 router.route('/').get(async(req, res) => {
-  console.log(req);
   // query variable is set
   if (req.query.sort)
   {
-    if (req.query.sort == "open") {//path is ?sort=open
-      console.log("Searching for open");
-      // If the capacity index doesn't exist in the willAttendList then we it is open
-      Event.find({"willAttendList.capacity": {"$exists": false}})
-      .then(events => res.json(events))
+    if (req.query.sort == "open") {
+      Event.find()
+      .then((events) => {
+        let temp = [];
+        for (let i = 0; i < events.length; i++) {
+          if (events[i].capacity > events[i].willAttendList.length) {
+            temp.push(events[i])
+          }
+        }
+        res.json(temp)
+      })
       .catch(err => res.status(400).json('Error: ' + err));
     }
     else if (req.query.sort == "name") {
-      console.log("Filtering by name");
       Event.find()
         .sort({title:1})
         .then(events => res.json(events))
         .catch(err => res.status(400).json('Error: ' + err));
     }
     else if (req.query.sort == "date") {
-      console.log("Filtering by date");
       Event.find()
         .sort({date:1, time:1})
         .then(events => res.json(events))

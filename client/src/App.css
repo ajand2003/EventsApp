@@ -406,7 +406,7 @@ textarea[name=desc] {
 
 .dropdown:hover .dropdown-content {
   display: block;
-  
+}
 /*MAP CS */
 .map__container{
   width: 100%;
