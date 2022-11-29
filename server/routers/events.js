@@ -38,6 +38,7 @@ router.route('/').get(async(req, res) => {
     }
     else if (req.query.sort == "name") {
       Event.find()
+        .collation({locale: "en" }) // case insensitivity
         .sort({title:1})
         .then(events => res.json(events))
         .catch(err => res.status(400).json('Error: ' + err));
