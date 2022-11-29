@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import RSVPList from "./RSVPList";
 import Invite from "./Invite";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 export interface RSVPListProps {
     event: any,
     invite: boolean,
@@ -99,12 +101,12 @@ export default function Event({setIsEditing, removeEvent, handleActive, index, _
     },[update])
     return (
         <div>
-            {act !== "event__active" && <div className={act} onClick = {() => {handleActive(index)}}>
+            {act !== "event__active" && act!== "map__event__active" && <div className={act} onClick = {() => {handleActive(index)}}>
                 <div className = "event__body">
                     <div className='event__title'>{title}</div>
                 </div>
             </div>}
-            {act === "event__active" && !viewList && !inviting &&
+            {(act === "event__active" || act === "map__event__active") && !viewList && !inviting &&
                 <div className={act}>
                     <div className = "event__body">
                         <div className='event__title'>{title}</div>
@@ -123,16 +125,16 @@ export default function Event({setIsEditing, removeEvent, handleActive, index, _
                         </div>
                         <div>AVAILABLE SPOTS: {capacity - numSpots} / {capacity}</div>
                     </div>
-                    <ul><li className = "event__tags">{host}</li><li className = 'event__tags'>{date}</li><li className = 'event__tags'>{time}</li><li className = 'event__tags'>{location}</li></ul>
+                    <ul className="event__tags__container"><li className = "event__tags">{host}</li><li className = 'event__tags'>{date}</li><li className = 'event__tags'>{time}</li><li className = 'event__tags'>{location}</li> {act !== "map__event__active" && <li title = "view on map" className="view__on__map" onClick = {() => {setEventId(_id);navigate("/map")}}><FontAwesomeIcon icon={faMapMarkerAlt} /></li>}</ul>
                 </div>
             }
-            {act === "event__active" && viewList && !inviting &&
+            {(act === "event__active" || act === "map__event__active") && viewList && !inviting &&
                 <div className='rsvp__list'>
                     <RSVPList setViewList = {setViewList} setEvent = {setEvent} event={event} invite = {invite}></RSVPList>
                 </div>
             }
-            {act === "event__active" && inviting && <Invite setInviting = {setInviting}></Invite>}
-            {(host==username || userType!="student") && <div className= "edit__delete">
+            {act === "event__active" && index != -1 && inviting && <Invite setInviting = {setInviting}></Invite>}
+            {(host==username || userType!="student") && index != -1 && <div className= "edit__delete">
                 <button className = "edit__button" onClick = {() => {handleEdit()}}>EDIT</button>
                 <button className = "delete__button" onClick = {() => {deleteEvent()}}>DELETE</button>
                 {invite && <button className = "invite__button" onClick = {() => handleInvite()}>Invite</button>}

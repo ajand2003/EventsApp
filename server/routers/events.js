@@ -95,8 +95,6 @@ router.route('/addRSVPUser').post((req, res) => {
     if(event.invite) {
       let in_list = false;
       for (let i = 0; i < event.inviteList.length; i++) {
-        console.log('hi')
-        console.log(event.inviteList[i], req.body.username);
         if(event.inviteList[i] == req.body.username) {
           in_list = true;
           break;
@@ -120,7 +118,6 @@ router.route('/addRSVPUser').post((req, res) => {
         addUserToList(event.nemesisAttendList, req.body.username);
     }
     else if (s == "Attending") {
-        console.log('yo')
         addUserToList(event.willAttendList, req.body.username);
     }
     else if (s == "Not Sure") {
@@ -158,6 +155,7 @@ router.route('/add').post((req, res) => {
 
   const host = req.body.host;
   const location = req.body.location;
+  const latlng = req.body.latlng;
   const desc = req.body.desc;
   const date = req.body.date;
   const title = req.body.title;
@@ -175,6 +173,7 @@ router.route('/add').post((req, res) => {
     host,
     time,
     location,
+    latlng,
     desc,
     date,
     title,
@@ -187,10 +186,9 @@ router.route('/add').post((req, res) => {
     capacity,
     
   });
-  console.log(newEvent);
   newEvent.save()
   .then(() => res.json('Event added!'))
-  .catch(err => res.status(400).json('Error: ' + err));
+  .catch(err => {res.status(400).json('Error: ' + err)});
 });
 
 router.route('/:id').get((req, res) => {
