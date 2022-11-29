@@ -35,6 +35,31 @@ export default function EventsPage() {
     const [currPage, setCurrPage] = useState(0);
     const [currPages, setCurrPages] = useState<any>([]);
     const navigate = useNavigate();
+    let dropdown_state = "No filter";
+    const [selectedOption, setSelectedOption] = useState(["None", "open", "date", "name"]);
+    const Option = selectedOption.map(Option => Option);
+
+    // Function to handle the filter
+    const handleFilter = (option: React.ChangeEvent<HTMLSelectElement>) => {
+      console.log("Entered filter handler function");
+      console.log(option.target.value);
+    
+      // const handleOptionChange = (e) => console.log((selectedOption[e.target.value]));
+      // query parameters: can either be open, name or date
+      const params = {
+        sort : option.target.value
+      }
+      axios.get('http://localhost:5000/events', {params})
+      .then(rs => {
+        let temp = rs.data
+        setEvents(temp);
+      })
+      .catch((error) => {
+        alert('Cannot apply filter');
+      });   
+    }
+
+
     const removeEvent = (i: number) => {
       let temp = events
       temp.splice(i,1)
@@ -87,7 +112,18 @@ export default function EventsPage() {
   return (
     <div>
     {!isEditing && <div className="events">
+
       <button className = "add__event"  onClick = {() => {navigate("/create")}}>Add Event</button>
+
+      {/* If we want to convert the fitlers to buttons it would look like the following */}
+      {/* <button className = "add__event"  onClick = {() => handleFilter("open")}>Filter for open events</button> */}
+      <label>Filter:</label>
+      <select className = "add__event" onChange={e => handleFilter(e)}>
+        {
+          Option.map((option: string, key) => <option value={option}>{option}</option>)
+        }
+      </select>
+
       <div className = 'event__container'>{events.map((index: number, i: number) => {
         if (Math.floor(i / 10) == currPage) {
             return (
