@@ -14,7 +14,8 @@ export interface EventProps {
   host:string,
   title: string,
   date: string, 
-  time: string,
+  timeStart: string,
+  timeEnd: string,
   location: string,
   desc: string,
   _id: string
@@ -25,7 +26,10 @@ export interface EditProps {
   setUpdate: (t:boolean) => void,
   index: number,
 }
-export default function EventsPage() {
+interface EventsPageProps {
+  personal?: Boolean
+}
+export default function EventsPage({personal = false}: EventsPageProps) {
     const[events, setEvents] = useState<any>([]);
     const [eventClicked, setEventClicked] = useState(0);
     const[isEditing, setIsEditing] = useState(false)
@@ -35,19 +39,16 @@ export default function EventsPage() {
     const [currPage, setCurrPage] = useState(0);
     const [currPages, setCurrPages] = useState<any>([]);
     const navigate = useNavigate();
-    let dropdown_state = "No filter";
-    const [selectedOption, setSelectedOption] = useState(["None", "open", "date", "name"]);
-    const Option = selectedOption.map(Option => Option);
-
+    const {sorting, setSorting, username} = useContext(UserContext);
     // Function to handle the filter
     const handleFilter = (option: React.ChangeEvent<HTMLSelectElement>) => {
-      console.log("Entered filter handler function");
-      console.log(option.target.value);
-    
       // const handleOptionChange = (e) => console.log((selectedOption[e.target.value]));
       // query parameters: can either be open, name or date
+      setSorting(option.target.value);
+      let ids = [];
       const params = {
-        sort : option.target.value
+        sort : option.target.value,
+        username: username,
       }
       axios.get('http://localhost:5000/events', {params})
       .then(rs => {
@@ -67,7 +68,11 @@ export default function EventsPage() {
       setUpdate(true);
     }
     const handleActive = (i:number) => {
-      setActive(i);
+      if (i == active) {
+        setActive(-1)
+      } else {
+        setActive(i);
+      }
     }
     const getNumPages = () => {
       const pages = [];
@@ -88,18 +93,81 @@ export default function EventsPage() {
       setCurrPages(pages);
     }
     useEffect(() => {
-      axios.get('http://localhost:5000/events/')
+      let params;
+      if(!personal && (sorting == 'created' || sorting == 'rsvp')) {
+        setSorting("None")
+        params = {
+          sort : "None",
+          username: username
+        }
+      } else {
+        let ids = Array<String>();
+        if (sorting == "rsvp") {
+          const params = {
+            username: username
+          }
+          axios.get('http://localhost:5000/users', {params})
+          .then(rs => {
+            ids = rs.data.userEventList
+            console.log(ids)
+          })
+          .catch(error => console.log(error))
+        }
+        params = {
+          sort : sorting,
+          username: username,
+          ids: ids,
+        }
+      }
+      axios.get('http://localhost:5000/events', {params})
       .then(rs => {
         let temp = rs.data
         setEvents(temp);
-      });
+      })
     },[])
     useEffect (() => {
-      axios.get('http://localhost:5000/events/')
+      let params;
+      if(!personal && (sorting == 'created' || sorting == 'rsvp')) {
+        setSorting("None")
+        params = {
+          sort : "None",
+          username: username
+        }
+      } else {
+        let ids = Array<String>();
+        if (sorting == "rsvp") {
+          const params = {
+            username: username
+          }
+          axios.get('http://localhost:5000/users', {params})
+          .then(rs => {
+            ids = rs.data.userEventList
+            const params = {
+              sort : sorting,
+              username: username,
+              ids: ids,
+            }
+            axios.get('http://localhost:5000/events', {params})
+            .then(rs => {
+              let temp = rs.data
+              setEvents(temp);
+            })
+          })
+          .catch(error => console.log(error))
+        } else {
+        params = {
+          sort : sorting,
+          username: username,
+          ids: ids,
+        }
+      }
+      console.log(params)
+      axios.get('http://localhost:5000/events', {params})
       .then(rs => {
         let temp = rs.data
         setEvents(temp);
-      });
+      })
+    }
       setUpdate(false);
     },[update])
     useEffect (() => {
@@ -113,21 +181,24 @@ export default function EventsPage() {
     <div>
     {!isEditing && <div className="events">
 
-      <button className = "add__event"  onClick = {() => {navigate("/create")}}>Add Event</button>
+      {personal && <button className = "add__event"  onClick = {() => {navigate("/create")}}>Add Event</button>}
 
       {/* If we want to convert the fitlers to buttons it would look like the following */}
       {/* <button className = "add__event"  onClick = {() => handleFilter("open")}>Filter for open events</button> */}
-      <label>Filter:</label>
-      <select className = "add__event" onChange={e => handleFilter(e)}>
-        {
-          Option.map((option: string, key) => <option value={option}>{option}</option>)
-        }
+      {!personal && <div><label>Filter:</label>
+      <select className = "add__event" onChange={handleFilter} defaultValue = {sorting}>
+        <option value ="None">None</option>
+        <option value="open">Open</option>
+        <option value="name">Name</option>
+        <option value="date">Date</option>
       </select>
+      </div>}
 
       <div className = 'event__container'>{events.map((index: number, i: number) => {
         if (Math.floor(i / 10) == currPage) {
             return (
-              <div onClick = {() => setEventClicked(i)}><Event setIsEditing = {setIsEditing} removeEvent = {removeEvent} handleActive = {handleActive} index = {i} act = {active == i ? "event__active" : "not__active"} _id = {events[i]._id} host = {events[i].host} title = {events[i].title} date = {events[i].date} time = {events[i].time} desc = {events[i].desc} location = {events[i].location}></Event></div>
+              <div onClick = {() => setEventClicked(i)}>
+                <Event setIsEditing = {setIsEditing} removeEvent = {removeEvent} handleActive = {handleActive} index = {i} act = {active == i ? "event__active" : "not__active"} _id = {events[i]._id} host = {events[i].host} title = {events[i].title} date = {events[i].date} timeStart = {events[i].timeStart} timeEnd = {events[i].timeEnd} desc = {events[i].desc} location = {events[i].location}></Event></div>
             );}
           })}</div>
           <div className="pages">{currPages.map((index: number, i: number) => {
