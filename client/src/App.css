@@ -508,3 +508,28 @@ textarea[name=desc] {
   background-color: white;
   color: rgb(50, 50, 100);
 }
+
+.time__conflicts {
+  display:flex;
+  font-size: 2rem;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  color: red;
+}
+.conflict__list {
+  background-color: red;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  list-style: none;
+}
+.conflict__item{
+  color: white;
+  width: 100%;
+  text-align: center;
+  margin-right: 3vw;
+}

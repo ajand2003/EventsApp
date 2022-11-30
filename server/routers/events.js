@@ -55,6 +55,7 @@ router.route('/').get(async(req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
     } 
     else if (req.query.sort == "rsvp") {
+      console.log(req.query.ids);
       Event.find().where('_id').in(req.query.ids)
         .then(events => res.json(events))
         .catch(err => res.status(400).json('Error: ' + err));

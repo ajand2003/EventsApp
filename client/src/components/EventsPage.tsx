@@ -109,7 +109,6 @@ export default function EventsPage({personal = false}: EventsPageProps) {
           axios.get('http://localhost:5000/users', {params})
           .then(rs => {
             ids = rs.data.userEventList
-            console.log(ids)
           })
           .catch(error => console.log(error))
         }
