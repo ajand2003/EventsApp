@@ -161,7 +161,6 @@ export default function EventsPage({personal = false}: EventsPageProps) {
           ids: ids,
         }
       }
-      console.log(params)
       axios.get('http://localhost:5000/events', {params})
       .then(rs => {
         let temp = rs.data

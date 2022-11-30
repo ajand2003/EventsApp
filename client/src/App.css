@@ -446,14 +446,20 @@ textarea[name=desc] {
   justify-content: center;
   align-items: center;
 }
-.map__container {
-}
-.map__event {
+.map__events {
   position: absolute;
   z-index: 1;
   animation: none;
   max-width: 50%;
-  max-height: 50%;
+  max-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none;
+}
+.map__events::-webkit-scrollbar { width: 0 !important }
+.map__event {
+  margin: 5vh;
 }
 .map__event__active{
   padding: 1rem 0rem 1rem 1rem;
