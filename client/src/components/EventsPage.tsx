@@ -45,9 +45,10 @@ export default function EventsPage({personal = false}: EventsPageProps) {
       // const handleOptionChange = (e) => console.log((selectedOption[e.target.value]));
       // query parameters: can either be open, name or date
       setSorting(option.target.value);
+      let ids = [];
       const params = {
         sort : option.target.value,
-        username: username
+        username: username,
       }
       axios.get('http://localhost:5000/events', {params})
       .then(rs => {
@@ -92,19 +93,30 @@ export default function EventsPage({personal = false}: EventsPageProps) {
       setCurrPages(pages);
     }
     useEffect(() => {
-      console.log(personal)
       let params;
       if(!personal && (sorting == 'created' || sorting == 'rsvp')) {
-        console.log('adisio')
         setSorting("None")
         params = {
           sort : "None",
           username: username
         }
       } else {
+        let ids = Array<String>();
+        if (sorting == "rsvp") {
+          const params = {
+            username: username
+          }
+          axios.get('http://localhost:5000/users', {params})
+          .then(rs => {
+            ids = rs.data.userEventList
+            console.log(ids)
+          })
+          .catch(error => console.log(error))
+        }
         params = {
           sort : sorting,
-          username: username
+          username: username,
+          ids: ids,
         }
       }
       axios.get('http://localhost:5000/events', {params})
@@ -116,23 +128,46 @@ export default function EventsPage({personal = false}: EventsPageProps) {
     useEffect (() => {
       let params;
       if(!personal && (sorting == 'created' || sorting == 'rsvp')) {
-        console.log('adisio')
         setSorting("None")
         params = {
           sort : "None",
           username: username
         }
       } else {
+        let ids = Array<String>();
+        if (sorting == "rsvp") {
+          const params = {
+            username: username
+          }
+          axios.get('http://localhost:5000/users', {params})
+          .then(rs => {
+            ids = rs.data.userEventList
+            const params = {
+              sort : sorting,
+              username: username,
+              ids: ids,
+            }
+            axios.get('http://localhost:5000/events', {params})
+            .then(rs => {
+              let temp = rs.data
+              setEvents(temp);
+            })
+          })
+          .catch(error => console.log(error))
+        } else {
         params = {
           sort : sorting,
-          username: username
+          username: username,
+          ids: ids,
         }
       }
+      console.log(params)
       axios.get('http://localhost:5000/events', {params})
       .then(rs => {
         let temp = rs.data
         setEvents(temp);
       })
+    }
       setUpdate(false);
     },[update])
     useEffect (() => {

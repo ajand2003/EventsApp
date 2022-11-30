@@ -62,12 +62,34 @@ export default function Event({setIsEditing, removeEvent, handleActive, index, _
         axios.post('http://localhost:5000/events/addRSVPUser', config)
         .then(rs => {
             alert("Added to RSVP");
+            if (status === "Attending") {
+                const config = {
+                    username: username,
+                    _id: _id
+                }
+                axios.post('http://localhost:5000/users/addUserEvent', config)
+            } else {
+                const config = {
+                    username: username,
+                    _id: _id
+                }
+                axios.post('http://localhost:5000/users/deleteUserEvent', config)
+            }
           })
         .catch((error) => {
             alert('You cannot join');
           })    
         setStatus("Attending");
-        setUpdate(true);
+        const url = "http://localhost:5000/events/" + _id;
+        axios.get(url)
+        .then(rs => {
+            let temp = rs.data;
+            setEvent(temp);
+            setNumSpots(temp.willAttendList.length)
+            setInvite(temp.invite);
+            setCapacity(temp.capacity)
+            setUpdate(true);
+        });
     }
     const handleRSVPChange = (e: React.ChangeEvent<any>) => {
         const value = e.target.value;

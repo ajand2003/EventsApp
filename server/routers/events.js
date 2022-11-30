@@ -54,6 +54,11 @@ router.route('/').get(async(req, res) => {
         .then(events => res.json(events))
         .catch(err => res.status(400).json('Error: ' + err));
     } 
+    else if (req.query.sort == "rsvp") {
+      Event.find().where('_id').in(req.query.ids)
+        .then(events => res.json(events))
+        .catch(err => res.status(400).json('Error: ' + err));
+    } 
     else // if the query variable is not open, name, date then return all events
     {
       Event.find()
