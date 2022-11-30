@@ -16,7 +16,7 @@ export interface RSVPListProps {
 export interface InviteProps {
     setInviting: (t:boolean) => void
 }
-export default function Event({setIsEditing, removeEvent, handleActive, index, _id, act,host,title,desc,time,date,location}: EventProps) {
+export default function Event({setIsEditing, removeEvent, handleActive, index, _id, act,host,title,desc,timeStart,timeEnd, date,location}: EventProps) {
     const{username, userType, setEventId} = useContext(UserContext);
     const [status,setStatus] = useState("Attending");
     const [viewList, setViewList] = useState(false);
@@ -125,7 +125,7 @@ export default function Event({setIsEditing, removeEvent, handleActive, index, _
                         </div>
                         <div>AVAILABLE SPOTS: {capacity - numSpots} / {capacity}</div>
                     </div>
-                    <ul className="event__tags__container"><li className = "event__tags">{host}</li><li className = 'event__tags'>{date}</li><li className = 'event__tags'>{time}</li><li className = 'event__tags'>{location}</li> {act !== "map__event__active" && <li title = "view on map" className="view__on__map" onClick = {() => {setEventId(_id);navigate("/map")}}><FontAwesomeIcon icon={faMapMarkerAlt} /></li>}</ul>
+                    <ul className="event__tags__container"><li className = "event__tags">{host}</li><li className = 'event__tags'>{date}</li><li className = 'event__tags'>{timeStart} - {timeEnd}</li><li className = 'event__tags'>{location}</li> {act !== "map__event__active" && <li title = "view on map" className="view__on__map" onClick = {() => {setEventId(_id);navigate("/map")}}><FontAwesomeIcon icon={faMapMarkerAlt} /></li>}</ul>
                 </div>
             }
             {(act === "event__active" || act === "map__event__active") && viewList && !inviting &&

@@ -14,7 +14,8 @@ export interface EventProps {
   host:string,
   title: string,
   date: string, 
-  time: string,
+  timeStart: string,
+  timeEnd: string,
   location: string,
   desc: string,
   _id: string
@@ -161,7 +162,8 @@ export default function EventsPage({personal = false}: EventsPageProps) {
       <div className = 'event__container'>{events.map((index: number, i: number) => {
         if (Math.floor(i / 10) == currPage) {
             return (
-              <div onClick = {() => setEventClicked(i)}><Event setIsEditing = {setIsEditing} removeEvent = {removeEvent} handleActive = {handleActive} index = {i} act = {active == i ? "event__active" : "not__active"} _id = {events[i]._id} host = {events[i].host} title = {events[i].title} date = {events[i].date} time = {events[i].time} desc = {events[i].desc} location = {events[i].location}></Event></div>
+              <div onClick = {() => setEventClicked(i)}>
+                <Event setIsEditing = {setIsEditing} removeEvent = {removeEvent} handleActive = {handleActive} index = {i} act = {active == i ? "event__active" : "not__active"} _id = {events[i]._id} host = {events[i].host} title = {events[i].title} date = {events[i].date} timeStart = {events[i].timeStart} timeEnd = {events[i].timeEnd} desc = {events[i].desc} location = {events[i].location}></Event></div>
             );}
           })}</div>
           <div className="pages">{currPages.map((index: number, i: number) => {

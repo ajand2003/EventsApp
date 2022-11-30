@@ -58,7 +58,7 @@ export default function Map() {
         return <MarkerF key = {i} onClick = {() => {handleClick(i)}} position = {loc}/>
       })}
     </GoogleMap>
-    {currEvent!=null && <div className = "map__event" ref={ref}><Event setIsEditing = {() => {}} removeEvent = {() => {}} handleActive = {() => {}} index = {-1} act = 'map__event__active' _id = {currEvent._id} host = {currEvent.host} title = {currEvent.title} date = {currEvent.date} time = {currEvent.time} desc = {currEvent.desc} location = {currEvent.location}></Event></div>}
+    {currEvent!=null && <div className = "map__event" ref={ref}><Event setIsEditing = {() => {}} removeEvent = {() => {}} handleActive = {() => {}} index = {-1} act = 'map__event__active' _id = {currEvent._id} host = {currEvent.host} title = {currEvent.title} date = {currEvent.date} timeStart = {currEvent.timeStart} timeEnd = {currEvent.timeEnd} desc = {currEvent.desc} location = {currEvent.location}></Event></div>}
     </div>
   );
 }
