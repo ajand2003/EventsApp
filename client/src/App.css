@@ -312,6 +312,10 @@ textarea[name=desc] {
   cursor: pointer;
   background-color: rgb(23, 53, 54);
 }
+.time__inputs {
+  color: white;
+  font-size: 1rem;
+}
 .pages {
   display: flex; 
   margin-bottom: 5vh;

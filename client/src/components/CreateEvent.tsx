@@ -18,7 +18,8 @@ export default function CreateEvent() {
       } = usePlacesAutocomplete();
     const [title, setTitle] = useState('')
     const [date, setDate] = useState('')
-    const [time, setTime] = useState('')
+    const [timeStart, setTimeStart] = useState('')
+    const [timeEnd, setTimeEnd] = useState('')
     const [latlng, setLatLng] = useState<google.maps.LatLngLiteral>()
     const [desc, setDesc] = useState('')
     const [capacity, setCapacity] = useState(0);
@@ -39,7 +40,8 @@ export default function CreateEvent() {
         const event = {
             title: title,
             date: date,
-            time: time,
+            timeStart: timeStart,
+            timeEnd: timeEnd,
             location: value,
             latlng: latlngtemp,
             desc: desc,
@@ -62,9 +64,13 @@ export default function CreateEvent() {
         const value = e.target.value
         setDate(value)
     }
-    const handleTimeChange = (e: React.ChangeEvent<any>) => {
+    const handleTimeStartChange = (e: React.ChangeEvent<any>) => {
         const value = e.target.value
-        setTime(value)
+        setTimeStart(value)
+    }
+    const handleTimeEndChange = (e: React.ChangeEvent<any>) => {
+        const value = e.target.value
+        setTimeEnd(value)
     }
     const handleLocationChange = (e: React.ChangeEvent<any>) => {
         setValue(e.target.value)
@@ -126,9 +132,13 @@ export default function CreateEvent() {
                 <input type="date" name="date" placeholder="date" />
                 </label>
             </div>
-            <div>
-                <label onChange={handleTimeChange}>
-                    <input type="time" name="time" placeholder="time" />
+            <div className="time__inputs">
+                <label onChange={handleTimeStartChange}>
+                    <input type="time" name="timeStart" placeholder="00:00" />
+                </label>
+                -to-
+                <label onChange={handleTimeEndChange}>
+                    <input type="time" name="timeEnd" placeholder="23:59" />
                 </label>
             </div>
             <div ref={ref}>

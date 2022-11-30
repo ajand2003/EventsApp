@@ -168,7 +168,8 @@ router.route('/add').post((req, res) => {
   const desc = req.body.desc;
   const date = req.body.date;
   const title = req.body.title;
-  const time = req.body.time;
+  const timeStart = req.body.timeStart;
+  const timeEnd = req.body.timeEnd;
   const invite = req.body.invite;
   const inviteList = [];
   const capacity = req.body.capacity;
@@ -180,7 +181,8 @@ router.route('/add').post((req, res) => {
 
   const newEvent = new Event({
     host,
-    time,
+    timeStart,
+    timeEnd,
     location,
     latlng,
     desc,
