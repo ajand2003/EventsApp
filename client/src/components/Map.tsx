@@ -13,7 +13,7 @@ export default function Map() {
   const {eventId} = useContext(UserContext);
   const[events, setEvents] = useState<any>([]);
   const [center,setCenter] = useState({ lat: 33.7759456, lng: -84.3965694 })
-  const [currEvent, setCurrEvent] = useState<any>(null);
+  const [currEvents, setCurrEvents] = useState<any>(null);
   const {sorting} = useContext(UserContext);
   const options = useMemo<MapOptions>(
     () => ({
@@ -23,11 +23,18 @@ export default function Map() {
     []
   );
   const handleClick = (i: number) => {
-    setCenter(events[i].latlng);
-    setCurrEvent(events[i])
+    const latlng = events[i].latlng
+    let temp = []
+    for (let i = 0; i < events.length; i++) {
+      if(events[i].latlng.lat === latlng.lat && events[i].latlng.lng === latlng.lng) {
+        temp.push(events[i])
+      }
+    }
+    setCenter(temp[0].latlng);
+    setCurrEvents(temp)
   }
   const ref = useOnclickOutside(() => {
-    setCurrEvent(null);
+    setCurrEvents(null);
   });
   useEffect(() => {
     const params = {
@@ -46,7 +53,7 @@ export default function Map() {
     for (let i = 0; i < events.length; i++) {
       if(eventId == events[i]._id) {
         setCenter(events[i].latlng);
-        setCurrEvent(events[i])
+        setCurrEvents(events[i])
       }
     }
   },[events])
@@ -58,7 +65,11 @@ export default function Map() {
         return <MarkerF key = {i} onClick = {() => {handleClick(i)}} position = {loc}/>
       })}
     </GoogleMap>
-    {currEvent!=null && <div className = "map__event" ref={ref}><Event setIsEditing = {() => {}} removeEvent = {() => {}} handleActive = {() => {}} index = {-1} act = 'map__event__active' _id = {currEvent._id} host = {currEvent.host} title = {currEvent.title} date = {currEvent.date} timeStart = {currEvent.timeStart} timeEnd = {currEvent.timeEnd} desc = {currEvent.desc} location = {currEvent.location}></Event></div>}
+    {currEvents!=null && <div className = "map__events" ref={ref}>
+      {currEvents.map((index: number, i: number) => {
+        return <div key = {i} className = "map__event"><Event setIsEditing = {() => {}} removeEvent = {() => {}} handleActive = {() => {}} index = {-1} act = 'map__event__active' _id = {currEvents[i]._id} host = {currEvents[i].host} title = {currEvents[i].title} date = {currEvents[i].date} timeStart = {currEvents[i].timeStart} timeEnd = {currEvents[i].timeEnd} desc = {currEvents[i].desc} location = {currEvents[i].location}></Event></div>
+      })}
+      </div>}
     </div>
   );
 }
